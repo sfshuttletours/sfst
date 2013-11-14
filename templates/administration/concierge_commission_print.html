@@ -1,0 +1,72 @@
+{% load satchmo_currency %}
+
+<html>
+<body onload="window.print();">
+
+<div class="controls">
+    <h1>Commission Report for {{ concierge.name }}</h1>
+    <h2>Hotel: {{ concierge.hotel_name }}</h2>
+    <div>
+        <b>Home Address</b></br>
+        {{ concierge.pretty_home_address|safe }}
+    </div>
+    <h3>Start/End Date: {{ start_date|date:"m/d/Y" }} to {{ end_date|date:"m/d/Y" }}</h3>
+</div>
+
+<div>
+    <h3>Your Orders</h3>
+    {% if orders %}
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer Name</th>
+                <th>Order Date</th>
+                <th>Tour</th>
+                <th>Tickets</th>
+                <th>Commission</th>
+            </tr>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.contact.first_name }}, {{ order.contact.last_name }}</td>
+                    <td>{{ order.time_stamp|date:"m/d/Y" }}</td>
+                    <td>{{ order.tours_string }}</td>
+                    <td>
+                        {% for optionkey, quantity in order.quantities.items %}
+                            {{ optionkey }}: {{ quantity|floatformat }}<br />
+                        {% endfor %}
+                    
+                    </td>
+                    <td style="text-align: right">{{ order.commission|currency }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th style="text-align: right" colspan="5">Total Commission</th>
+                <td style="text-align: right">{{ total_commission|currency }}</td>
+            </tr>
+        </table>
+    {% else %}
+        <p>No orders for {{ label }}</p>
+    {% endif %}
+</div>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h3>Your Commission Rates</h3>
+<table>
+    {% for tour_type in tour_types %}
+        {% if tour_type.default_commission > 0 %}
+            <tr>
+                <th>{{ tour_type.name }}</th>                
+                <td>{{ tour_type.default_commission|floatformat }}</td>                
+            </tr>
+        {% endif %}
+    {% empty %}
+        <tr>
+            <th colspan="2">No commissions set</th>
+        </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

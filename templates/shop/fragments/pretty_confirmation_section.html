@@ -1,0 +1,13 @@
+<div class="section">
+    <h4>{{ section.title }}</h4>
+    {% for sub_section in section.sub_sections.all %}
+        {% if sub_section.live %}
+            <div class="sub_section">
+                <h5>{{ sub_section.title }}</h5>
+                <p>
+                    {{ sub_section.content|safe|linebreaksbr }}
+                </p>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

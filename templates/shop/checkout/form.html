@@ -1,0 +1,164 @@
+{% extends "shop/base.html" %}
+{% load i18n ctags %}
+
+{% block extra-head %}
+{% include "contact/_contact_info_form.html" %}
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+    <div id="cc_form" class="user_checkout">
+        <h3>Enter Cardholder Information</h3>
+        <p>Please enter cardholder information on this secure booking page and proceed to the next page. Your confirmation will come via email. </p>
+
+        {% if form.non_field_errors %}
+            <h2>{% trans "Please correct the following error:" %}</h2>
+            {{ form.non_field_errors }}
+        {% endif %}
+
+        <form method="post" action="{% url satchmo_checkout-step1 %}">
+
+            {{ form.paymentmethod }}
+
+            <div class="form_box">
+                <span class="asterix">*</span>
+                <label for="id_first_name">Cardholder First Name</label>{{ form.first_name }}
+            </div>
+           {% if form.first_name.errors %}<div class="error" colspan="2">*** {{ form.first_name.errors|join:", " }}</div>{% endif %}
+
+            <div class="form_box">
+                <span class="asterix">*</span>
+                <label for="id_last_name">Cardholder Last Name</label>{{ form.last_name }}
+            </div>
+            {% if form.last_name.errors %}<div class="error" colspan="2">*** {{ form.last_name.errors|join:", " }}</div>{% endif %}
+
+
+
+            <div class="form_box">
+                <span class="asterix">*</span>
+                <label for="id_postal_code">{% trans "Zipcode/Postcode" %}{% if form.postal_code.field.required %}{% endif %}</label>{{ form.postal_code }}
+            </div>
+            {% if form.postal_code.errors %}<div class="error" colspan="2">*** {{ form.postal_code.errors|join:", " }}</div>{% endif %}
+
+            <div class="cl"></div>
+
+
+            <div class="form_box">
+                <span class="asterix">*</span>
+                <label for="id_street1">Billing Address 1</label>{{ form.street1 }}<br/>
+                <small>(your house number is enough, we don't need street name)</small>
+            </div>
+            {% if form.street1.errors %}<div class="error" colspan="2">*** {{ form.street1.errors|join:", " }}</div>{% endif %}
+
+<div class="cl"></div>
+
+
+
+            <div class="form_box">
+                <span class="asterix">*</span>
+                <label for="id_city">City{% if form.city.field.required %}{% endif %}</label>{{ form.city }}
+            </div>
+
+            {% if form.city.errors %}<div class="error" colspan="2">*** {{ form.city.errors|join:", " }}</div>{% endif %}
+
+
+
+            {% if country %}
+              {% if form.fields.state.choices %}
+              <div class="form_box">
+                  <span class="asterix">*</span>
+                  <label for="id_state">{% if country.get_admin_area_display %}{{ country.get_admin_area_display }}{% else %}{% trans "State/Province" %}{% endif %} {% if form.state.field.required %}{% endif %}</label>
+                  <div><p id="id_state_loading" style="display: none">Loading...</p> {{ form.state }}</div>
+              </div>
+              {% endif %}
+            {% else %}
+              <div class="form_box">
+                  <label for="id_state">{% trans "State/Province" %} {% if form.state.field.required %}*{% endif %}</label></td>
+                  <div><p id="id_state_loading" style="display: none">Loading...</p> {{ form.state }}</div>
+              </div>
+            {% endif %}
+            <div class="cl"></div>
+            {% if form.state.errors %}<div class="error" colspan="2">*** {{ form.state.errors|join:", " }}</div>{% endif %}
+
+
+
+            {% if not country %}
+                <div class="cl"></div>
+                <div class="form_box">
+                    <label for="id_country">{% trans "Country" %}</label>{{ form.country }}
+                </div>
+                {% if form.country.errors %}<div class="error" colspan="2">*** {{ form.country.errors|join:", " }}</div>{% endif %}
+            {% endif %}
+<div class="cl"></div>
+
+
+
+            <div class="form_box">
+                <label for="id_email">{% trans "Email address" %}</label>{{ form.email }}<br/><small>(if you would like confirmation)</small>
+            </div>
+            {% if form.email.errors %}<div class="error" colspan="2">*** {{ form.email.errors|join:", " }}</div>{% endif %}
+
+            <div class="form_box">
+                <label for="id_phone">{% trans "Phone number" %}{% if form.phone.field.required %}*{% endif %}</label>{{ form.phone }}<br/><small>(Needed to possibly contact you)</small>
+            </div>
+            {% if form.phone.errors %}<div class="error" colspan="2">*** {{ form.phone.errors|join:", " }}</div>{% endif %}
+
+            {% if form.discount.is_hidden %}
+                {{ form.discount }}
+            {% else %}
+                {# <tr><td colspan="2"><h4>{% trans "Discounts" %}</h4></td></tr> #}
+                {# <tr><td><label for="id_discount">{% trans "Discount code" %}</label></td><td>{{ form.discount }}</td></tr> #}
+                {# {% if form.discount.errors %}<tr><td class="error" colspan="2">*** {{ form.discount.errors|join:", " }}</td></tr>{% endif %} #}
+            {% endif %}
+            {# {% if sale %}{% include "product/sale_details.html" %}{% endif %} #}
+
+            	<div class="form_box">
+        	        <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+        	        <input id="continue" type="submit" value="{% trans "Continue Checkout" %}"/>
+        	    </div>
+        </form>
+        {% if request.user.can_book_free_tours %}
+            <a href="{% url affiliate_checkout %}?force_charge=0">Skip payment for this order</a>
+        {% endif %}
+    </div>
+
+    <span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=AvL29JC7FUUgzOxpyTl1T4B4zh9bCdDfO09DEMZ9MPzPBP8U77N9u"></script><br/><a style="font-family: arial; font-size: 9px" href="http://videos.godaddy.com" target="_blank">GoDaddy</a></span>
+
+    <script type="text/javascript">
+        function set_state(state_code, state_name){
+            // needed because all states don't have state code!
+            $('#id_state').val(state_code);
+            if (!$('#id_state').val()) {
+                var state_val = $("#id_state option:contains('" + state_name + "')").val();
+                $('#id_state').val(state_val);
+            }
+        }
+
+        $(function() {
+            $('form').submit(function() {
+                $('form input[type=submit]').attr('disabled', true);
+                $('form img').show();
+            });
+
+            $('#id_postal_code').change(function() {
+                $.get('{% url zip_to_city_country %}', {'zip_code': $(this).val()}, function(data){
+                    if (data.success && data.location) {
+                        $('#id_city').val(data.location.city);
+
+                        new_country_val = $("#id_country option:contains('" + data.location.country + "')").val();
+                        current_country_val = $('#id_country').val();
+
+                        if (current_country_val == new_country_val) {    // no change in country
+                            set_state(data.location.state_code, data.location.state);
+                        } else {
+                            $('#id_country').val(new_country_val);
+                            $('#id_country').change();  // to fire re-load of states
+                            setTimeout(function() {  set_state(data.location.state.toLowerCase(), data.location.state); }, 750);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

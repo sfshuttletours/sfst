@@ -1,0 +1,309 @@
+/* reset.css */
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
+
+
+/*
+* CSS stuff
+*/
+.cl { clear: both; }
+.fl { float: left; }
+.fr { float: right; }
+
+div.messages ul{
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 10px;
+}
+
+div.messages img{
+    margin-left:5px;
+}
+
+div.messages.error {
+    border: red;
+    border-width: 1px;
+    border-style: solid;
+}
+
+div.messages {
+    margin-bottom:20px;
+}
+
+div.messages.success{
+    border: green;
+    border-width: 1px;
+    border-style: solid;
+}
+
+a:link, a:active, a:hover, a:visited { outline: none; }
+a { color: #BC0000; }
+
+
+/*
+* Global
+*/
+html { background-color: #B41E17; }
+body {font-family: Helvetica,Verdana,Arial,Geneva,sans-serif;}
+h1, h2, h3 { font-weight: bold; }
+p { margin-bottom: 1em; }
+dt { float: left; clear: left; width: 150px; display: block; font-weight: bold;}
+dd { float: left;}
+
+.error, .alert { color: #FF0000; }
+form .error { font-size: 11px; }
+
+.hide { display: none; }
+
+#click_to_call { position: fixed; bottom: 0px; left: 50px; padding: 5px 5px 10px 5px; font-size: 13px; }
+
+
+/* overrides */
+.ui-widget { font-size: 0.9em; }
+
+div#navbar {width: 100%; height: 22px; background: url('../img/topmenubg.jpg');}
+div#navbar ul li{float: left; font-size: 14px;}
+div#navbar ul li a, .booking_as span {color: #FFF; border-right: 1px solid #CCC; text-decoration: none;  padding: 3px 10px; float: left;}
+div#navbar ul li a:hover{text-decoration: underline;}
+div#navbar ul li.booking_as span {display: block; border: none;}
+div#navbar ul li.booking_as span a {border: none; padding: 0; float: none;}
+
+#container { width: 1024px; margin: 5px auto; background: #FFFFFF; border: 1px solid #000; }
+#content { padding: 15px 10px; min-height: 250px; }
+#footer { padding: 5px 10px; margin: 100px 0 0 0; font-size: 11px; }
+h1 { font-size: 1.3em; text-align: center; text-transform: uppercase; color: #0055BB; margin: 10px 0 20px 0; }
+
+/*
+TODO: bring back when categories stuff launches
+
+#home div.productImage {float: left; max-width: 140px; margin: 20px 10px; text-align: center;}
+#home div.productImage div.image img { width: 130px; }
+#home div.productImage p a {text-decoration: none; color: #000; font-size: 11px;}
+#home div.productImage p a:hover {background-color: #96B9D7;}*/
+
+#home div.tour_category { display: block; margin-top: 20px; }
+#home div.tour_category h2 { background-color:#e9e9e9; margin:3px; padding:3px; color:#333;font-size:18px; }
+
+#home div.productImage {float: left; width: 250px; height: 150px; margin: 20px 10px; text-align: center;}
+#home div.productImage div.image {height: 120px;}
+#home div.productImage p { font-size:14px; padding:2px; }
+#home div.productImage p a {text-decoration: none; color: #000; font-weight: bold; padding: 2px; }
+
+
+/*
+* Product pages
+*/
+#order { margin: 0 50px;}
+#order #continue { width: 120px; margin: 30px auto; text-align: center; clear: left; }
+ul.errorlist li { color: red; text-align: center;}
+
+
+/*#order h1 { font-size: 1.2em; text-align: center; margin: 10px 0 10px 0;}*/
+#order h2 { color: #FFF; text-align: center; margin: 20px 0; background-color: #B41E17; clear: both; padding: 2px 0px; }
+#order p { font-size: 1.1em; }
+#order label { float: left; width: 450px; display: block; text-align: right; clear: left; margin-right: 20px;}
+#order select, #order input { float: left; }
+#order input { height: 25px; }
+#order #names input.names {
+	display: block;
+	float: none;
+	margin: 5px auto 0;
+	width: 350px;
+}
+
+#order #calendar #widget { width: 80%; margin: 0px auto; }
+#order #quantity { height: auto; }
+
+#order .quantity_ticket_type-0 { padding: 5px; background-color: #FF99FF; }
+#order .quantity_ticket_type-1 { padding: 5px; background-color: #00FFFF; }
+#order .quantity_ticket_type-2 { padding: 5px; background-color: #FFFF00; }
+#order .quantity_ticket_type-3 { padding: 5px; background-color: #99FF99; }
+#order .quantity_ticket_type-4 { padding: 5px; background-color: #FFFF00; }
+
+#order #step_3 { margin-top: 10px; }
+#order #step_3 label { width: 480px; line-height: 1.7em; }
+#order #step_3 input { float: right; margin-left: 20px;}
+
+
+
+
+/*#step_3 { display: none; }*/
+.ui-datepicker-multi .ui-datepicker-buttonpane {display: none;} /* hides the "Today" button on the product page */
+
+table.cart { width: 100%;}
+table.cart th { font-weight: bold;}
+table.cart th, table.cart td { border: 1px solid #CCC; padding: 3px;}
+
+#view_cart #checkout_link { width: 300px; margin: 25px auto 0px auto; }
+#view_cart #checkout_link a { font-weight: bold; font-size: 17px; color: #b82018; }
+#view-cart-link { float: right; }
+#view-cart-link a { margin-right: 20px; font-size: 1.3em; }
+#view-cart-link img { height: 30px; float: left;}
+
+#view_cart #cart_products { width: 800px; margin: 20px auto; }
+#view_cart #cart_products .image { float : left; width: 380px; }
+
+#view_cart .empty { width: 500px; margin: 0px auto; text-align: center; }
+body.desktop #view_cart h2.add_another { width: 575px; font-weight: normal; font-size: 18px; color: #b82018; margin: 10px auto;}
+
+#resellers h3 {color: #336699; margin: 1em 0;}
+#resellers td { padding: 3px; font-size: 14px; }
+#resellers table#request th { width: 300px; }
+#resellers table#request td { padding-left: 20px; }
+#resellers input { width: 330px; }
+
+
+/*
+* Payment Screen
+*/
+#cc_form { padding: 10px 50px 10px 50px; width: 600px; }
+#cc_form h3 { color: #336699; padding: 0px 0px 10px 0px; }
+#cc_form table { font-size: 14px; margin-left: 50px; }
+#cc_form td { padding: 5px; }
+
+#cc_form { font-size: 14px; margin-left: 50px; }
+.asterix{color:#f00;}
+body.desktop #cc_form .form_box { padding: 10px; width: 380px; }
+body.desktop #cc_form .form_box label { float: left; }
+body.desktop #cc_form .form_box input, #cc_form .form_box select { float: right; width: 200px; }
+
+#payment h3 { font-size: 20px; color: #336699; margin: 20px 0;}
+#payment h4 { clear: left; border-bottom: 1px solid #000; font-weight: bold; padding-top: 20px; margin-bottom: 10px; }
+#payment dt {font-weight: normal;}
+#payment .small_block { float: left; width: 250px; margin-right: 20px; }
+body.desktop #payment input { font-size: 17px; }
+#payment { font-size: 15px; }
+#payment a { font-size: 11px; }
+#payment #payment_terms_col { width: 400px; }
+#payment #payment_terms_col a { font-size: 13px; }
+#payment form { padding-left: 20px; }
+#payment form tr td.error { padding: 0px 0px 10px 200px; }
+#payment form tr td { padding: 2px 0px; }
+
+body.desktop #terms_placement {float:right; margin-top:-12px; margin-left:30px;}
+
+body.desktop #payment .form_box { padding: 10px; width: 400px; }
+body.desktop #payment .form_box label { float: left; }
+body.desktop #payment .form_box input, body.desktop #payment .form_box select { float: right; }
+#payment div#payment_terms_col input { float: left; }
+#payment div#payment_terms_col label { float: right; }
+
+#siteseal, .AuthorizeNetSeal { float: right; margin: 0px 20px; }
+#siteseal { padding-top: 27px; min-width: 120px; }
+
+/*Admin*/
+
+
+
+
+
+/* Mobile site css */
+/*GLOBAL */
+html, body{width:99%; margin:0 auto;}
+body.mobile #navbar {height:41px;}
+body.mobile #navbar a {font-size:1.3em;}
+body.mobile #content, body.mobile #container, body.mobile #top {width:100%; margin:0;padding:0;}
+body.mobile #content {margin-top:2em;}
+body.mobile #footer {font-size:1.3em; clear:both;}
+body.mobile #footer a {font-size:1.0em;}
+body.mobile h1{font-size:2.6em;}
+body.mobile h2{font-size:2.4em;}
+body.mobile h3, body.mobile #payment h3{font-size:2.2em; margin-left:20px;}
+body.mobile h4{font-size:2.0em;}
+body.mobile p {padding:40px; font-size:2.1em;}
+body.mobile input{font-size:3em; width:95%; border:2px solid #999;}
+body.mobile select {font-size:2.6em; margin:0; padding:0;}
+body.mobile small{font-size:2em;}
+body.mobile #top a img{width:100%}
+body.mobile form {width:98%; padding:0; margin:0;}
+/*body.mobile form img {width:70%}*/
+body.mobile p img, body.mobile #continue img {width:20%}
+body.mobile #cc_form {width:auto}
+body.mobile ul.errorlist li {font-size:2em;}
+
+
+/* MOBILE CALENDAR / product page */
+body.mobile #order #calendar .ui-datepicker { width: 100%; }
+body.mobile #order #calendar .ui-datepicker td span, body.mobile .ui-datepicker td a { padding: 1em; text-align: center; }
+body.mobile #schedules ul li label{float:left; white-space:nowrap; }
+body.mobile #schedules input{width:30px;height:30px;float:right;margin-top:18px;}
+
+body.mobile #mobile_date_selector { width: 65%; margin: 0px auto; min-height: 30px; }
+body.mobile #order input.names {font-size:1.5em;}
+
+
+/* CHECKOUT */
+body.mobile td form input {font-size:1em}
+body.mobile tr td a {font-size:1.2em; white-space:nowrap;}
+body.mobile #cart_products a {color:#06C; font-size:1.3em; padding:5px; margin-bottom:6px; display:block;}
+body.mobile #view_cart #checkout_link { width: 700px; text-align:center;white-space:nowrap; border:2px solid #999; padding:10px;}
+body.mobile #view_cart #checkout_link a { font-weight: bold; font-size: 2em; color: #b82018; }
+body.mobile #view_cart h2.add_another { width: 1000px; font-weight: normal; font-size: 1.5em; text-align:center; color: #b82018; margin: 10px auto;}
+body.mobile table {width:98%; margin:0 auto; padding:0;}
+body.mobile tr{border:0; }
+
+
+/*CUSTOMER INFORMATION PAGE */
+body.mobile .form_box {height:160px;}
+body.mobile .form_box2 {height:220px;}
+body.mobile label, body.mobile .asterix {font-size:2.8em; float:left; white-space:wrap;}
+body.mobile .asterix{color:#f00; font-size:2.8em; float:left;}
+body.mobile #quantity label {font-size:2.5em; width:70%; white-space:nowrap;}
+body.mobile #continue input {width:350px; height:60px;}
+body.mobile input#continue {color:#d00; font-size:2.8em;}
+body.mobile .form_box select#id_state, body.mobile .form_box select#id_country {text-align:left; float:left; display:block; clear:both; width:400px;}
+body.mobile .form_box input { font-size:2.5em;}
+
+
+/*PAYMENT */
+body.mobile .cart {font-size:1.4em;}
+body.mobile #payment { font-size: .8em;}
+body.mobile #payment a { font-size: .8em; color:#f00; }
+body.mobile #payment input { font-size: 2em; }
+body.mobile input#id_terms{width:30px;height:30px;margin-right:18px; display:inline;float:left;}
+body.mobile input#id_credit_number, body.mobile #id_credit_type,  body.mobile input#id_ccv {display:block;clear:both; font-size:3em; margin-bottom:30px;}
+body.mobile input#id_credit_number {width:16em}
+body.mobile input#id_ccv {width:3em;}
+body.mobile #payment #payment_terms_col { width: auto; float:left; }
+body.mobile #payment #payment_terms_col a { font-size: .8em; }
+body.mobile #terms_placement {float:right; margin-top:-30px; margin-left:40px;}
+body.mobile #div_clear {clear:both; display:block}
+
+
+body.mobile #click_to_call { display: none; }
+
+
+body.user_adjustments table {
+    border-collapse: collapse;
+    margin-bottom:20px;
+    }
+
+body.user_adjustments div.contact_info {
+    width:40%;
+    float:left;
+}
+
+body.user_adjustments div.product_list {
+    width:60%;
+    float:right;
+}
+
+body.user_adjustments div h2 {
+    margin: 0 0 3px;
+}
+
+body.user_adjustments table th {
+    padding: 5px;
+    border: 1px solid #CCC;
+    text-align: left;
+    }
+
+body.user_adjustments table td {
+    border: 1px solid #CCC;
+    text-align: left;
+    padding: 5px;
+}
+
+body.user_adjustments table tr{
+    padding: 5px;
+    text-align: left;
+}

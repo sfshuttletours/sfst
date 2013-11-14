@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <style>
+            #error_container { margin: 10px auto; width: 500px; }
+            h1 { font-size: 25px; width: 400px; margin: 30px auto; text-align: center; }
+            span.phone { font-size: 17px; }
+            p { margin: 20px auto; width: 300px; text-align: center; }
+        </style>
+    </head>
+
+    <body>
+        <div id="error_container">
+            <img src="/static/img/error_logo.png" />
+            {% block content %}{% endblock %}
+            <p><a href="{% url home %}">Click here</a> to book a tour.</p>
+            <p>OR</p>
+            <p>Call Toll Free:  <span class="phone">1-866-991-TOUR (8687)</span></p>
+        </div>
+    </body>
+</html>

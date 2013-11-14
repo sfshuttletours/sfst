@@ -1,0 +1,84 @@
+{% extends "concierges/base.html" %}
+{% load satchmo_currency %}
+
+{% block title %}Commission Report | {{ concierge.name }}{% endblock title %}
+
+{% block concierge-content %}
+    <div class="controls">
+        <h1>Commission Report for {{ label }}</h1>
+        <form action="." method="GET">
+            Select date range: 
+            <input type="text" name="start_date" id="start_date" value="{{ start_date|date:'m/d/Y' }}" /> to 
+            <input type="text" name="end_date" id="end_date" value="{{ end_date|date:'m/d/Y' }}" />
+            <input type="submit" value="Go" />
+        </form>
+        <div>
+            <strong>Or jump to:</strong> 
+            {% for day, month, half in recent_periods %}
+                <a href="{% url concierges_commissions %}?day={{ day|date:"m/d/Y" }}">{{ month }} ({{ half }}) </a> {% if not forloop.last %}|{% endif %}
+            {% endfor %}
+        
+        </div>
+    </div>
+    
+    <div>
+        <h3>Your Orders</h3>
+        {% if orders %}
+            <table>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Order Date</th>
+                    <th>Tour</th>
+                    <th>Tickets</th>
+                    <th>Commission</th>
+                </tr>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.contact.first_name }}, {{ order.contact.last_name }}</td>
+                        <td>{{ order.time_stamp|date:"m/d/Y" }}</td>
+                        <td>{{ order.tours_string }}</td>
+                        <td>
+                            {% for optionkey, quantity in order.quantities.items %}
+                                {{ optionkey }}: {{ quantity|floatformat }}<br />
+                            {% endfor %}
+                        
+                        </td>
+                        <td style="text-align: right">{{ order.commission|currency }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th style="text-align: right" colspan="5">Total Commission</th>
+                    <td style="text-align: right">{{ total_commission|currency }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <p>No orders for {{ label }}</p>
+        {% endif %}
+    </div>
+
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <h3>Your Commission Rates</h3>
+    <table>
+        {% for tour_type in tour_types %}
+            {% if tour_type.default_commission > 0 %}
+                <tr>
+                    <th>{{ tour_type.name }}</th>                
+                    <td>{{ tour_type.default_commission|floatformat }}</td>                
+                </tr>
+            {% endif %}
+        {% empty %}
+            <tr>
+                <th colspan="2">No commissions set</th>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <script type="text/javascript" charset="utf-8">
+        $('input#start_date').datepicker({numberOfMonths: 3});
+        $('input#end_date').datepicker({numberOfMonths: 3});
+    </script>
+    
+{% endblock concierge-content %}

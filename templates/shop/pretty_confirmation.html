@@ -1,0 +1,91 @@
+{% load ctags %}
+<style type="text/css" media="screen, print">
+    .cl {clear: both;}
+    strong {font-weight: bold;}
+    #confirmation {
+        border: 1px solid #000;
+        padding: 2px;
+        font-size: 12px;
+    }
+    #confirmation div {
+    }
+    h3 { font-size: 14px; color: #111111; }
+    #confirmation h4 {
+        background-color: #B41E17;
+        color: #FFF;
+        padding: 2px;
+        border: none;
+        font-size: 14px;
+        margin: 10px 0;
+        float: left;
+        width: 99.6%;
+    }
+    #confirmation h5 {
+        font-weight: bold;
+    }
+    .left-column, .right-column, .sub_section {
+        width: 49%;
+        float: left;
+    }
+
+    .banner { width: 600px; margin: 0px auto; }
+    .banner img { max-width: 550px; max-height: 150px; }
+    .banner_text { text-align: center; width: 550px; margin: 5px auto; }
+    .banner_text h2 { font-size: 25px; }
+    #coupons { display: inline-block; width: 100%; margin: 10px auto; padding: 5px; }
+    .coupon { padding: 0; height: 130px; width: 550px; border: 2px dotted #444444; margin: 0 auto 5px; text-align: center;}
+    .coupon img { max-width: 540px; max-height: 130px; margin: 0;}
+
+    .full-column { width: 90%; float: left; }
+    #footer { display: none; }
+</style>
+
+<h3>{{ order_confirmation_banner_text.header_top_text }} <a href="http://{{ site_domain_name }}{% url customer_order_detail order.orderhash.hash %}">Click to use our automated refund/date/time change system</a> to see if you qualify to be able to change time/date of your tour or obtain a refund if you need to cancel (based on our refund policies).</h3>
+<div id="confirmation">
+    <div class="left-column">
+        <img src="http://{{ site_domain_name }}{{ site_skin.order_confirmation_logo.url }}?v={{ site_skin.hash }}" />
+    </div>
+    <div class="right-column">
+        {{ site_skin.order_confirmation_contact_info|safe }}
+    </div>
+    <div class="cl"></div>
+
+    <h4>Reservation Details</h4>
+    <p>
+        Today's date: {% now "m-d-Y" %}<br />
+        Reservation Number: {{ order.id }}
+    </p>
+    <h4>Customer Information</h4>
+    <div class="left-column">
+        <h5>Contact Information</h5>
+        Passenger: {{ order.contact.full_name }}<br />
+        {% for phone in order.contact.phonenumber_set.all %}
+            {% if phone.phone %}
+                {{ phone.type }} Phone: {{ phone.phone }}<br />
+            {% endif %}
+        {% endfor %}
+        Email: {{ order.contact.email }}
+    </div>
+    <div class="right-column">
+        {% for address in order.contact.addressbook_set.all %}
+            <h5>{% if address.is_default_shipping %}Billing{% else %}Billing{% endif %} Address</h5>
+            {{ address.street1 }}{% if address.street2 %}<br />{{ address.street2 }}{% endif %}<br />
+            {{ address.city }}, {{ address.state }} {{ address.postal_code }}<br />
+        {% endfor %}
+    </div>
+    <div class="cl"></div>
+    <h4>Order Details</h4>
+    <div class="cl"></div>
+    <div class="full-column">
+        {% with order.orderitem_set.all as cart %}
+            {% include "shop/cart_table.html" %}
+        {% endwith %}
+    </div>
+
+
+    {% for section in order_confirmation_sections %}
+        {% include 'shop/fragments/pretty_confirmation_section.html' %}
+    {% endfor %}
+
+    <div class="cl"></div>
+</div>

@@ -1,0 +1,129 @@
+{% extends "admin/base_site.html" %}
+
+{% load pagination_tags %}
+{% load ctags %}
+
+{% block title %}Check-in Reports{% endblock title %}
+
+
+{% block content %}
+    <form action="{% url checkin_reports %}" method="GET">
+        <label for="search">Tour Check-in Date:</label>
+        <input type="text" name="tour_date" value="{{ tour_date|date:"m/d/Y" }}" class="small" />
+
+        <input type="submit" value="Submit" />
+        <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+    </form>
+
+    {% if product_to_data_map %}
+        <table class="checkin_report">
+            <tr>
+                <th></th>   <!-- blank -->
+                {% for k in product_to_data_map.keys %}
+                    <th>{{ k.tourproduct.tour_type.name }} ( {{ k.tourproduct.tour_time|time }} )</th>
+                {% endfor %}
+                <th>TOTALS</th>
+            </tr>
+
+            <tr>
+                <th>Total Passengers</th>
+                {% for k, v in product_to_data_map.items %}
+                    <td>{{ v.num_checkedin|floatformat }}</td>
+                {% endfor %}
+                <td>{{ cross_tour_totals.num_checkedin|floatformat }}</td>
+            </tr>
+
+            <tr>
+                <th>Finalized By</th>
+                {% for k, v in product_to_data_map.items %}
+                    <td>{% if v.finalization %}{{ v.finalization.done_by }}<br/>{{ v.finalization.timestamp|date:"M d, Y  H:m" }}{% endif %}</td>
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <th>Amount Received (Sales)</th>
+                {% for k, v in product_to_data_map.items %}
+                    <td>${{ v.amount_taken_sales|floatformat }}</td>
+                {% endfor %}
+                <td>${{ cross_tour_totals.amount_taken_sales|floatformat }}</td>
+            </tr>
+
+            <tr>
+                <th>Change Order Fees Collected</th>
+                {% for k, v in product_to_data_map.items %}
+                    <td>${{ v.amount_taken_change_order_fees|floatformat }}</td>
+                {% endfor %}
+                <td>${{ cross_tour_totals.amount_taken_change_order_fees|floatformat }}</td>
+            </tr>
+
+            <tr>
+                <th>Total Cash Received</th>
+                {% for k, v in product_to_data_map.items %}
+                    <td class="highlight">${{ v.cash_received|floatformat }}</td>
+                {% endfor %}
+                <td class="super_highlight">${{ cross_tour_totals.cash_received|floatformat }}</td>
+            </tr>
+
+            <tr>
+                <th>Total CC/Batch</th>
+                {% for k, v in product_to_data_map.items %}
+                    <td>${{ v.cc_batch|floatformat }}</td>
+                {% endfor %}
+                <td>${{ cross_tour_totals.cc_batch|floatformat }}</td>
+            </tr>
+
+            <!-- <tr>
+                <th>Total Amount Collected</th>
+                {% for k, v in product_to_data_map.items %}
+                    <td class="highlight">${{ v.total_amount_collected|floatformat }}</td>
+                {% endfor %}
+                <td>${{ cross_tour_totals.total_amount_collected|floatformat }}</td>
+            </tr> -->
+
+            <tr>
+                <th class="super_highlight">Grand Total</th>
+                {% for k, v in product_to_data_map.items %}
+                    <td class="highlight">${{ v.grand_total|floatformat }}</td>
+                {% endfor %}
+                <td class="super_highlight">${{ cross_tour_totals.grand_total|floatformat }}</td>
+            </tr>
+        </table>
+
+        <br/>
+        <p>
+            <b>Note:</b>
+            {% if checkin_note %}
+                {{ checkin_note }} -- <a href="#" onclick="change_day_note('{{ tour_date|date:"m/d/Y" }}', '{{ checkin_note }}');">Edit note</a>
+            {% else %}
+                <a href="#" onclick="change_day_note('{{ tour_date|date:"m/d/Y" }}', '');">Add note</a>
+            {% endif %}
+        </p>
+    {% endif %}
+
+    <script type="text/javascript" charset="utf-8">
+        $('input[name=tour_date]').datepicker();
+
+        function redirect_to_self() {
+          var url = location.href;
+          //Remove anchor from url
+          var anchor_index = url.indexOf('#');
+          if (anchor_index != -1) {
+            url = url.substring(0, anchor_index);
+          }
+          location.href = url;
+        }
+
+        function change_day_note(day, current_note) {
+            new_note = prompt('Enter a day note for ' + day, current_note);
+            if (new_note != null) {
+                $.post('{% url day_note_update %}', {'day': day, 'note_text': new_note, 'type': 2},
+                    function(data) {
+                        if (data.success) {
+                            redirect_to_self();
+                        }
+                    }, 'json'
+                );
+            }
+        }
+    </script>
+{% endblock %}

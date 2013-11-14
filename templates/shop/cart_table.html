@@ -1,0 +1,62 @@
+{% load normalize_decimal %}
+{% load satchmo_currency %}
+{% load satchmo_discounts %}
+{% load satchmo_cart %}
+<table class="cart">
+    <tr>
+        <th>Tour Name</th>
+        <th>Tour Date</th>
+        <th>Ticket Type</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th style="text-align:center;">Total</th>
+        {% if editable %}
+            <th></th>
+        {% endif %}
+    </tr>
+    {% for cartitem in cart %}
+        {% if cartitem.unit_price > 0 %}
+            {% with cartitem.product.productvariation as variation %}                    
+            {% with variation.parent.product as main_product %}                    
+            {% with main_product.tourproduct as tour_product %}
+                <tr>
+                    <td>
+                        {% if editable %}
+                            <a href="{{ tour_product.tour_type.get_absolute_url }}">{{ tour_product.tour_type.name }}</a>
+                        {% else %}
+                            {{ tour_product.tour_type.name }}
+                        {% endif %}
+                    </td>
+                    <td>{{ tour_product.day|date:"M d, Y" }} at {{ tour_product.pretty_time }}</td>
+                    <td>{{ variation.optionkey }}</td>
+                    <td>{{ cartitem.quantity|normalize_decimal }}</td>
+        			<td align="center">
+                        {% if cartitem.product.unit_price != cartitem.unit_price %}
+                            <span style="text-decoration: line-through">{{ cartitem.product.unit_price|currency }}</span> {{ cartitem.unit_price|currency }}
+                        {% else %}
+                            {{ cartitem.product.unit_price|currency }}
+                        {% endif %}
+        			</td>
+                    <td style="text-align:right;">{{ cartitem|discount_line_total:sale|currency }}</td>
+                    {% if editable %}
+                        <td>
+                            <form action="{% url satchmo_cart_remove %}" method="post">
+                                <input type="hidden" name="cartitem" value="{{ cartitem.id }}" />
+                                <input type="submit" value="Remove" />
+                            </form>
+                        </td>
+                    {% endif %}
+                </tr>
+        		{% cartitem_custom_details cartitem %}  {% comment %} TODO: what does this do ? {% endcomment %}
+        		{% cartitem_subscription_details cartitem %}
+            {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        {% endif %}
+    {% endfor %}
+    <tr>
+        <th colspan="5" style="text-align:right;">Cart Total:&nbsp;</th>
+        <td style="text-align:right;">{{ cart|discount_cart_total:sale|currency }}</td>
+        {% if editable %}<td></td>{% endif %}
+    </tr>
+</table>

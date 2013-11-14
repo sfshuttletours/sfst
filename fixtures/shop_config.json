@@ -1,0 +1,21 @@
+[
+    {
+        "pk": 1, 
+        "model": "shop.config", 
+        "fields": {
+            "city": "", 
+            "sales_country": 231, 
+            "phone": "", 
+            "street1": "", 
+            "street2": "", 
+            "shipping_countries": [], 
+            "store_name": "San Francisco Shuttle Tours", 
+            "state": "", 
+            "postal_code": "", 
+            "store_description": "", 
+            "country": 231, 
+            "store_email": "", 
+            "in_country_only": true
+        }
+    }
+]

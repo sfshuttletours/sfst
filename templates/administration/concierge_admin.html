@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+
+{% load ctags %}
+
+{% block title %}Concierge Administration{% endblock title %}
+
+
+{% block links %}
+    <li><a href="#">Pay Commission</a></li>
+{% endblock links %}
+
+{% block content %}
+    <div id="left" class="fl">
+        <h1>Write a global note</h1>
+
+        <form action="#" method="POST" class="concierge_note_form">
+            {{ global_message_form.is_global_note }}
+            {{ global_message_form.not_notify_email }} <label for="not_notify_email">Do not notify (anyone) via email</label><br/>
+            {{ global_message_form.message }}{{ global_message_form.message.errors }}
+            <br/>
+            <input type="submit" value="Post Global Note">
+            <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+        </form>
+
+        <br/><br/>
+
+        <h1>Write a global e-mail</h1>
+        <form action="#" method="POST" class="concierge_note_form">
+            {{ global_email_form.is_global_email }}
+            {{ global_email_form.subject }}{{ global_email_form.subject.errors }}<br/>
+            {{ global_email_form.message }}{{ global_email_form.message.errors }}
+            <br/>
+            <input type="submit" value="Send Global Email">
+            <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+        </form>
+    </div>
+
+    <div class="fr" id="concierge_links">
+        <ul>
+            <li><a href="{% url concierge_list %}">Global access to all Concierge Accounts</a></li>
+            <li><a href="{% url concierge_pay_commission %}">Pay Commission</a></li>
+            <li><a href="{% url adjust_concierge_commissions %}">Adjust Concierge Commissions</a></li>
+            <li><a href="{% url admin:localsite_teammember_changelist %}">Update Customer Service Team</a></li>
+            <li><a href="/admin/concierges/concierge/">Manage concierges</a></li>
+            <li><a href="{% url concierge_contact_sheet %}">Concierge Contact Sheet</a></li>
+        </ul>
+    </div>
+{% endblock content %}

@@ -1,0 +1,254 @@
+[
+    {
+        "pk": 1, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": true, 
+            "name": "5 Hour City Tour", 
+            "seats_available": 77, 
+            "image": "images/tours/city_tour_logo.jpg", 
+            "option_group": 1, 
+            "order": 0, 
+            "rollover_on": "images/productimage-picture-5-hour-city-tour-3_1.jpg", 
+            "is_combo": false, 
+            "default_commission": "15.00", 
+            "active": true, 
+            "rollover_off": "images/productimage-picture-5-hour-city-tour-2_1.jpg", 
+            "base_price": "70.00", 
+            "slug": "5-hour-city-tour", 
+            "description": "Purchase tickets for your San Francisco Shuttle Tours online. Choose a date of departure you would like to take your tour. We use a ticketless reservation system, so we will not mail you anything, and your name or email confirmation will serve as your tickets. We highly consider adding a Muir Woods Combo to your city tour. Any problems booking, please call 415-513-5400.",
+            "default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": true, 
+            "name": "Wine Country Napa Tour", 
+            "seats_available": 130, 
+            "image": "images/tours/wine_tours_logo_small.jpg", 
+            "option_group": 2, 
+            "order": 0, 
+            "rollover_on": "", 
+            "is_combo": false, 
+            "default_commission": "18.00", 
+            "active": true,
+            "rollover_off": "images/book_wt_logo______1.jpg", 
+            "base_price": "98.00", 
+            "slug": "wine-country-napa-tour", 
+            "description": "Purchase tickets for your Wine Country Tour Shuttle online. Choose a date of departure you would like to take your tour. We use a ticketless reservation system, so we will not mail you anything, and your name or email confirmation will serve as your tickets. All tours start at 8:15am. Any problems booking, please call 415-513-5400.",
+        	"default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": true, 
+            "name": "Monterey Cruiser Tour", 
+            "seats_available": 36, 
+            "image": "images/tours/montereytour.jpg", 
+            "option_group": 3, 
+            "order": 0, 
+            "rollover_on": "", 
+            "is_combo": false, 
+            "default_commission": "0.00", 
+            "active": true, 
+            "rollover_off": "", 
+            "base_price": "89.00", 
+            "slug": "monterey-cruiser-tour", 
+            "description": "",
+        	"default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": true, 
+            "name": "Muir Woods (only) Tour", 
+            "seats_available": 34, 
+            "image": "images/tours/muir_woods_tours_sm.jpg", 
+            "option_group": 5, 
+            "order": 0, 
+            "rollover_on": "images/book_muir_logo_over______1.jpg", 
+            "is_combo": false, 
+            "default_commission": "15.00", 
+            "active": true, 
+            "rollover_off": "images/book_muir_logo_______1.jpg", 
+            "base_price": "63.00", 
+            "slug": "muir-woods-only-tour", 
+            "description": "Purchase tickets for your Muir Woods Shuttle Tours online. Choose a date of departure you would like to take your tour. We use a ticketless reservation system, so we will not mail you anything, and your name or email confirmation will serve as your tickets. This tour starts at 1pm. Any problems booking, please call 415-513-5400.",
+        	"default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": false, 
+            "name": "Alcatraz Tour", 
+            "seats_available": 0, 
+            "image": "", 
+            "option_group": 8, 
+            "order": 99, 
+            "rollover_on": "", 
+            "is_combo": false, 
+            "default_commission": "0.00", 
+            "active": false, 
+            "rollover_off": "", 
+            "base_price": "0.00", 
+            "slug": "alcatraz-tour", 
+            "description": "",
+        	"default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": false, 
+            "name": "Alcatraz/City Tour Package", 
+            "seats_available": 0, 
+            "image": "", 
+            "option_group": null, 
+            "order": 99, 
+            "rollover_on": "", 
+            "is_combo": false, 
+            "default_commission": "0.00", 
+            "active": false, 
+            "rollover_off": "", 
+            "base_price": "0.00", 
+            "slug": "alcatrazcity-tour-package", 
+            "description": "",
+        	"default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": false, 
+            "name": "Gift Certificate", 
+            "seats_available": 0, 
+            "image": "", 
+            "option_group": null, 
+            "order": 99, 
+            "rollover_on": "", 
+            "is_combo": false, 
+            "default_commission": "0.00", 
+            "active": false, 
+            "rollover_off": "", 
+            "base_price": "0.00", 
+            "slug": "gift-certificate", 
+            "description": "",
+            "default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": false, 
+            "name": "Alcatraz/Monterey Combo", 
+            "seats_available": 0, 
+            "image": "", 
+            "option_group": 6, 
+            "order": 0, 
+            "rollover_on": "", 
+            "is_combo": false, 
+            "default_commission": "0.00", 
+            "active": false, 
+            "rollover_off": "", 
+            "base_price": "0.00", 
+            "slug": "alcatraz-monterey-combo", 
+            "description": "",
+            "default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": false, 
+            "name": "Alcatraz", 
+            "seats_available": 50, 
+            "image": "", 
+            "option_group": 8, 
+            "order": 8, 
+            "rollover_on": "", 
+            "is_combo": false, 
+            "default_commission": "0.00", 
+            "active": false, 
+            "rollover_off": "", 
+            "base_price": "80.00", 
+            "slug": "alcatraz-never-sold-alone", 
+            "description": "Alcatraz tour... never sold alone!?\r\n",
+            "default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": false, 
+            "name": "Muir Woods/City Tour Package", 
+            "seats_available": 30, 
+            "image": "images/tours/muir_woods_vert_logo.jpg", 
+            "option_group": 4, 
+            "order": 0, 
+            "rollover_on": "", 
+            "is_combo": true, 
+            "default_commission": "25.00", 
+            "active": true, 
+            "rollover_off": "", 
+            "base_price": "119.00", 
+            "slug": "muir-woodscity-tour-package", 
+            "description": "Purchase tickets for your Muir Woods City Tour Package online. Choose a date of departure you would like to take your tour. We use a ticketless reservation system, so we will not mail you anything, and your name or email confirmation will serve as your tickets. This packaged tour starts at 9am. Any problems booking, please call 415-513-5400.",
+        	"default_site_skin": 1
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": true, 
+            "name": "COMBO: Wine Country plus Alcatraz", 
+            "seats_available": 50, 
+            "image": "images/tours/wine_plis_alcatraz.png", 
+            "option_group": 7, 
+            "order": 10, 
+            "rollover_on": "", 
+            "is_combo": true, 
+            "default_commission": "0.00", 
+            "active": true, 
+            "rollover_off": "", 
+            "base_price": "134.00", 
+            "slug": "wine-country-plus-alcatraz", 
+            "description": "Purchase tickets for your Wine Country Tour plus Alcatraz Combo online. Choose a date of departure you would like to take your wine country portion of the tour. The Alcatraz portion will be the next day at 10am. We use a ticketless reservation system, so we will not mail you anything, and your name or email confirmation will serve as your tickets. Any problems booking, please call 415-513-5400.",
+        	"default_site_skin": 1
+        }
+    },
+    {
+        "pk": 12, 
+        "model": "localsite.tourtype", 
+        "fields": {
+            "has_brochures": false, 
+            "name": "COMBO: City/Muir Woods plus Alcatraz", 
+            "seats_available": 150, 
+            "image": "images/tours/city_muir_plus_alcatraz.png", 
+            "option_group": 9, 
+            "order": 11, 
+            "rollover_on": "", 
+            "is_combo": true, 
+            "default_commission": "0.00", 
+            "active": true, 
+            "rollover_off": "", 
+            "base_price": "155.00", 
+            "slug": "city-muir-alcatraz", 
+            "description": "Purchase tickets for your City/Muir Woods plus Alcatraz Combo online. Choose a date of departure you would like to take the City and Muir Woods portion of the tour. The Alcatraz portion will be the next day at 10am. We use a ticketless reservation system, so we will not mail you anything, and your name or email confirmation will serve as your tickets. Any problems booking, please call 415-513-5400.",
+            "default_site_skin": 1
+        }
+    }
+]

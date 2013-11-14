@@ -1,0 +1,12 @@
+{% extends 'error_base.html' %}
+
+{% block content %}
+    <h1>Some error has occurred. We're looking into this problem.</h1>
+
+    <p><strong>Oops, there must be something wrong, please type in your phone number and email address so we can contact you immediately to figure out what happened</strong></p>
+    <form method="post" action="{% url booking_error_form %}">
+        {{ form.as_p }}
+        <p><input type="submit" value="Submit" /></p>
+    </form>
+    <p>OR</p>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends "shop/base.html" %}
+{% load normalize_decimal %}
+{% load satchmo_currency ctags %}
+
+{% block body_class %}user_adjustments{% endblock %}
+{% block content %}
+    <style>
+        #navbar { display:none; }
+    </style>
+
+    <link rel="stylesheet" href="{% media_url 'css/fancybox/jquery.fancybox-1.3.1.css' %}" type="text/css" media="screen" />
+    <script src="{% media_url 'js/jquery.fancybox-1.3.1.pack.js' %}"></script>
+
+    {% if order.orderhash.already_voided %}
+    <div>
+        <h1>This order has already been voided and so no actions are available</h1>
+    </div>
+    {% endif %}
+    <div>
+        <h2>Contact Information</h2>
+        <table>
+            <tr>
+                <th>Contact</th>
+                <td>{{ contact.full_name }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{% if contact.email %}{{ contact.email }}{% else %}N/A{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Order #</th>
+                <td>{{ order.id }}</td>
+            </tr>
+            <tr>
+                <th>Order Timestamp</th>
+                <td>{{ order.time_stamp }}</td>
+            </tr>
+            {% for phone in contact.phonenumber_set.all %}
+                {% if phone.phone %}
+                    <tr>
+                        <th>{{ phone.type }} Phone</th>
+                        <td>{{ phone.phone }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            {% for address in contact.addressbook_set.all %}
+                {# Legacy Manual Addresses were all stored as ., lovely huh?  #}
+                {% if address.street1 != '.' and address.street1 %}
+                    <tr>
+                        <th>{% if address.is_default_shipping %}Shipping{% else %}Billing{% endif %} Address</th>
+                        <td>{{ contact.full_name }}<br />
+                            {{ address.street1 }}{% if address.street2 %}<br />{{ address.street2 }}{% endif %}<br />
+                            {{ address.city }}, {{ address.state }} {{ address.postal_code }}<br />
+
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            {% if order.AFFILIATE %}
+                <tr>
+                    <th>Affiliate:</th>
+                    <td>{{ order.AFFILIATE.handle }}</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+    <div>
+
+        <h2>Payment Details</h2>
+        {% for payment in order.payments.all %}
+            Paid {{ payment.amount|currency }} on {{ payment.time_stamp }} via {{ payment.payment }}: Transaction ID: {{ payment.transaction_id }}
+            {% with payment.credit_card as cc %}
+                {% if cc %}
+                <br />Credit Card Info: {{ cc.credit_type }} {% if cc.display_cc %}*{{ cc.display_cc }}{% endif %} {{ cc.expire_month }}/{{ cc.expire_year }} {{ cc.card_holder }}
+                {% endif %}
+            {% endwith %}
+            <br />
+        {% endfor %}
+        <br/>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Tour Date</th>
+                <th>Ticket Type</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th align="center">Total</th>
+                <th>Adjust</th>
+            </tr>
+            {% for item in order_items %}
+                {% with item.product.productvariation as variation %}
+                {% with variation.parent.product as main_product %}
+                {% with main_product.tourproduct as tour_product %}
+                    <tr>
+                        <td>
+                            {% if tour_product %}
+                                {{ tour_product.tour_type.name }}
+                            {% else %}
+                                {{ item.product.tourproduct.tour_type.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if tour_product %}
+                                {{ tour_product.day|date:"M d, Y" }} at {{ tour_product.pretty_time }}
+                            {% else %}
+                                {{ item.product.tourproduct.day|date:"M d, Y" }} at {{ item.product.tourproduct.pretty_time }}
+                            {% endif %}
+                        </td>
+                        <td>{{ variation.optionkey }}</td>
+                        <td>{{ item.quantity|normalize_decimal }}</td>
+                        <td align="right">{{ item.unit_price|currency }}</td>
+                        <td align="right">{{ item.line_total|currency }}</td>
+                        <td>
+                            {% if not order.orderhash.is_settled %}
+                            {% else %}
+                                {% if item in changeable_order_items %}
+                                    <a href="{% url customer_adjust_item item.id 'move' %}">Reschedule</a> or <a href="{% if item.order.orderhash.try_void %}{% url customer_adjust_item item.id 'void' %}{% else %}{% url customer_adjust_item item.id 'refund' %}{% endif %}">Refund</a>
+                                {% else %}
+                                    {% if item in already_voided %}
+                                        Already Voided
+                                    {% else %}
+                                        {% if item in already_refunded %}
+                                            Already Refunded
+                                        {% else %}
+                                            Not allowed. <a href="{% url customer_adjust_not_allowed_reason %}" class="button fancybox">See reason</a>.
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if item.STATUS %}
+                    <tr>
+                        <td colspan="7">
+                            <ol>
+                            {% for history in item.adjustment.history.all %}
+                                <li>
+                                {% if history.from_status %}
+                                    Changed from <strong>{{ history.get_from_status_display }}</strong> to <strong>{{ history.get_to_status_display }}</strong>
+                                {% else %}
+                                    Status set to <strong>{{ history.get_to_status_display }}</strong>
+                                {% endif %}
+                                on {{ history.timestamp }}
+                                </li>
+                                <br/>
+                            {% endfor %}
+                            </ol>
+                            <strong>Current Status:</strong> {{ item.STATUS|upper }}<br />
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endwith %}
+                {% endwith %}
+                {% endwith %}
+            {% endfor %}
+            <tr>
+                <td colspan="6" align="right">Total:</td>
+                <td>{{ order.total|currency }}</td>
+            </tr>
+        </table>
+    </div>
+    {% if not order.orderhash.is_settled and not order.orderhash.already_voided %}
+    <div>
+        <p>Your order has not yet settled in our credit card system and is currently voidable, which means once it's voided it will not even appear on your statement. If you are just wanting to change the date/time of your tour, we suggest to avoid change order fees, to simply commence with voiding your order and re-booking it entirely with the correct date/time you prefer.  This void order option expires at 3:45pm (Pacific Time) today!</p>
+        <form action="{% url void_order order.id %}" method="post" id="id_void_form">
+            {{ void_form }}
+            <div class="form_box">
+                <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+                <input id="void_submit" type="submit" value="Void Order" />
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <script>
+        $(function() {
+            $('a.fancybox').fancybox();
+            $('#void_submit').click(function(){
+                return confirm('Are you sure you want to void your order?');
+            });
+
+            $('#id_void_form').submit(function() {
+                $('#id_void_form input[type=submit]').attr('disabled', true);
+                $('#id_void_form img').show();
+            });
+        });
+    </script>
+{% endblock %}

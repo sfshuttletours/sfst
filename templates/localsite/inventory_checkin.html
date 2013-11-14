@@ -1,0 +1,192 @@
+{% extends "admin/base_site.html" %}
+{% load satchmo_currency %}
+{% load ctags %}
+
+{% block title %}Tours on {{ day|date:"M d, Y" }}{% endblock title %}
+
+{% block links %}{% endblock links %}
+
+{% block sub-extrahead %}
+    <!-- fancybox! -->
+    <script src="{% media_url 'js/jquery.fancybox-1.3.1.pack.js' %}"></script>
+    <link rel="stylesheet" href="{% media_url 'css/fancybox/jquery.fancybox-1.3.1.css' %}" type="text/css" media="screen" />
+    <style>
+        #hd img { display: none; }
+        #inventory_dates td.order_notes { max-width: 100px; }
+        
+        input[type="button"] { width: 70px; height: 30px; }
+        input[type="button"].checkin { background: url(none); background-color: #FF5555; }
+        input[type="button"].cash { background: url(none); background-color: #00FF00; }
+        input[type="button"].credit { background: url(none); background-color: #8888FF; }
+        input[type="button"].finalize { background: url(none); background-color: #DDDDDD; width: 120px; height: 30px; font-size: 16px; }
+        
+        #realtime_count { position: fixed; top: 60px; right: 10px; font-size: 20px; width: 270px; background: #666; color: white; padding: 10px; }
+        #inventory_dates { margin-top: 60px; }
+        
+        ul.messagelist li { font-size: 20px; width: 600px; line-height: 1.3em; }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- <h1>Tours on {{ day|date:"l" }}, {{ day|date:"M d, Y" }}</h1>
+    <a href="{% url inventory_detail %}?date={{ yesterday|date:"m/d/Y" }}">previous date</a> | 
+    <a href="{% url inventory_detail %}?date={{ tomorrow|date:"m/d/Y" }}">next date</a> 
+    
+    <div class="print"><a href="javascript:window.print()">Print this page</a></div> -->
+    
+    {% for tour_product in tour_products %}
+        <div id="realtime_count">
+            Checkins: <span id="num_customers_checked_in">{{ num_customers_checked_in }}</span> / <span id="num_customers_expected">{{ num_customers_expected }}</span>
+            <br/>
+            Seats Available: <span id="num_seats_available_for_walkins">{{ num_seats_available_for_walkins|floatformat }}</span> / {{ tour_product.product.items_in_stock|floatformat }}
+            <br/>
+            Total Cash Owed: $<span id="total_cash_owed">{{ total_cash_owed }}</span>
+        </div>
+        
+        <div id="inventory_dates">
+            <h2>
+                <a href="{% url inventory_detail %}?product={{ tour_product.product.id }}">{{ tour_product.tour_type.name }} - {{ tour_product.pretty_time }}{% if not tour_product.schedule.active %} (!){% endif %}</a> on {{ day|date:"M d, Y" }}
+                <!-- <div id="booked_total">Booked / Total: {{ tour_product.product.total_sold|floatformat }} / {{ tour_product.product.items_in_stock|floatformat }}</div> -->
+            </h2>
+        
+            {% with tour_product.passengers as passengers %}
+                {% if passengers %}
+                    <table class="inventory-details">
+                        <tr>
+                            <th>Name</th>
+                            <th class="order_notes">Notes</th>
+                            <th>Seats</th>
+                            {% if not tour_product_finalization or user.is_superuser %}
+                                <th>Check In</th>
+                            {% endif %}
+                            <th>Order ID</th>
+                        </tr>
+                        {% for contact in passengers %}
+                            {% if contact.order.status == 'New' %}
+                                <tr class="{% cycle 'even' 'odd' %} {% if contact.is_checked_in %}checked_in{% endif %}" id="checkin_row_{{ contact.order.id }}-{{ tour_product.product.id }}">
+                                    <td class="passenger_name"><a href="{% url admin:contact_contact_change contact.id %}" style="text-decoration: none;">{% if contact.last_name %}{{ contact.last_name }}, {% endif %}{{ contact.first_name }}</a><br/><small>{{ contact.cell }}</small></td>
+                                    <td class="order_notes">
+                                        {{ contact.order.notes|default:'' }}
+                                        {% if contact.order.AFFILIATE %}
+                                            {% if not contact.order.notes %}VIA: {{ contact.order.AFFILIATE.handle }}{% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% comment %}Not show pending order items or items not from this orderat all ?{% endcomment %}
+                                    
+                                        {% for item in contact.items %}
+                                            {{ item.quantity|floatformat }} {{ item.product.productvariation.optionkey }}{{ item.quantity|pluralize }}
+                                            {% if item.STATUS %}<a href="{% url order_detail item.order.id %}"><span class="red">{{ item.STATUS }}</span></a>{% endif %}<br />
+                                        {% endfor %}
+                                    </td>
+                                    
+                                    {% if not tour_product_finalization or user.is_superuser %}
+                                        <td>
+                                            {% if contact.order.is_concierge_order %}
+                                                <input type="button" value="Cash" onclick="checkin({{ contact.order.id }}, {{ tour_product.product.id }}, true);" id="cash_button_{{ contact.order.id }}-{{ tour_product.product.id }}" class="cash {% if contact.is_checked_in %}hide{% endif %}" />
+                                                <input type="button" value="Credit" onclick="checkin({{ contact.order.id }}, {{ tour_product.product.id }}, false);" id="credit_button_{{ contact.order.id }}-{{ tour_product.product.id }}" class=" credit {% if contact.is_checked_in %}hide{% endif %}" />
+                                            {% else %}
+                                                <input type="button" value="Check In" onclick="checkin({{ contact.order.id }}, {{ tour_product.product.id }});" id="checkin_button_{{ contact.order.id }}-{{ tour_product.product.id }}" class="checkin {% if contact.is_checked_in %}hide{% endif %}" />
+                                            {% endif %}
+                                            
+                                            <a href="{% url edit_customer_checkin %}?order_id={{ contact.order.id }}&product_id={{ tour_product.product.id }}" class="fancybox {% if not contact.is_checked_in %}hide{% endif %}" id="checkin_edit_{{ contact.order.id }}-{{ tour_product.product.id }}">Edit</a>
+                                        </td>
+                                    {% endif %}
+                                    
+                                    <td><a href="{% url order_detail contact.order.id %}">{{ contact.order.id }}</a></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>No seats sold yet.</p>
+                {% endif %}
+            {% endwith %}
+        </div>
+        
+        <br/>
+        <p>
+            <b>Note:</b>
+            {% if checkin_note %}
+                {{ checkin_note }} -- <a href="#" onclick="change_day_note('{{ day|date:"m/d/Y" }}', '{{ checkin_note }}');">Edit note</a>
+            {% else %}
+                <a href="#" onclick="change_day_note('{{ day|date:"m/d/Y" }}', '');">Add note</a>
+            {% endif %}
+        </p>
+        
+        <br/>
+        {% if tour_product_finalization %}
+            This tour has been finalized by <b>{{ tour_product_finalization.done_by }}</b> at <b>{{ tour_product_finalization.timestamp }}.
+        {% else %}
+            <input class="finalize" type="button" value="Finalize Now" onclick="if (confirm('Are you sure?')) { finalize({{ tour_product.pk }}); }" />
+        {% endif %}
+    
+    {% endfor %}
+    
+    <script type="text/javascript" charset="utf-8">
+        $('a.fancybox').fancybox();
+        
+        function checkin(order_id, product_id, is_cash) {
+            if (is_cash == undefined) {
+                is_cash = true;
+            }
+            $('#checkin_button_' + order_id + '-' + product_id).hide();
+            $('#cash_button_' + order_id + '-' + product_id).hide();
+            $('#credit_button_' + order_id + '-' + product_id).hide();
+            $.post('{% url checkin_customer %}', {'order_id': order_id, 'product_id': product_id, 'is_cash': is_cash}, function(data) {
+                if (data.success) {
+                    $('#checkin_row_' + order_id + '-' + product_id).addClass('checked_in');
+                    $('#checkin_edit_' + order_id + '-' + product_id).show();
+                    
+                    $('#num_customers_checked_in').html(data.num_customers_checkedin);
+                    $('#num_customers_expected').html(data.num_customers_expected);
+                    if (data.total_cash_owed) {
+                        $('#total_cash_owed').html(data.total_cash_owed);
+                    }
+                }
+            }, 'json');
+        }
+        
+        function edit_customer_checkin(order_id, product_id) {
+            $.fancybox('{% url edit_customer_checkin %}?order_id=' + order_id + '&' + 'product_id=' + product_id);
+        }
+        
+        function redirect_to_self() {
+          var url = location.href;
+          //Remove anchor from url
+          var anchor_index = url.indexOf('#');
+          if (anchor_index != -1) {
+            url = url.substring(0, anchor_index);
+          }
+          location.href = url;
+        }
+        
+        function change_day_note(day, current_note) {
+            new_note = prompt('Enter a day note for ' + day, current_note);
+            if (new_note != null) {
+                $.post('{% url day_note_update %}', {'day': day, 'note_text': new_note, 'type': 2},
+                    function(data) {
+                        if (data.success) {
+                            redirect_to_self();
+                        }
+                    }, 'json'
+                );
+            }
+        }
+        
+        function finalize(tour_product_id) {
+            $.post('{% url finalize_checkin %}', {'tour_product_id': tour_product_id}, function(data) {
+                if (data.success) {
+                    redirect_to_self();
+                }
+            }, 'json');
+        }
+        
+        $(function() {
+            if(navigator.platform == 'iPad' || navigator.platform == 'iPhone' || navigator.platform == 'iPod')
+            {
+                 $("#realtime_count").css("position", "static");
+            }; 
+        });
+    </script>
+{% endblock content %}

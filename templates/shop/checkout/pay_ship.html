@@ -1,0 +1,76 @@
+{% extends "shop/checkout/base_pay_ship.html" %}
+{% load i18n ctags %}
+{# credit card pay_ship version - we just need to collect CC info #}
+
+{% block payment_table %}
+    <link href="{% media_url 'css/facebox.css' %}" media="screen, print" rel="stylesheet" type="text/css" />
+    
+    <img src="{% media_url 'img/ccs_accepted.png' %}" />
+    
+    <div class="form_box">
+        <label for="id_credit_type">{% trans "Type of credit card" %}</label>{{ form.credit_type }}
+    </div>
+    {% if form.credit_type.errors %}<div class="error" colspan="2">*** {{ form.credit_type.errors|join:", " }}</div>{% endif %}
+    
+    <div class="cl"></div>
+    
+    <div class="form_box">
+        <label for="id_credit_number">{% trans "Credit card number" %}</label>{{ form.credit_number }}
+    </div>
+    <div class="cl"></div>
+    {% if form.credit_number.errors %}<div class="error" colspan="2">*** {{ form.credit_number.errors|join:", " }}</div>{% endif %}
+    
+    <div class="cl"></div>
+    
+    <div class="form_box">
+        <label for="id_month_expires">{% trans "Expiration date" %}</label>
+        <div id="div_clear">
+            <label for="id_year_expires"></label>{{ form.month_expires }} {{form.year_expires}}
+        </div>
+    </div>
+    <div class="cl"></div>
+    {% if form.year_expires.errors %}<div class="error" colspan="2">*** {{ form.year_expires.errors|join:", " }}</div>{% endif %}
+    
+    <div class="cl"></div>
+    
+    <div class="form_box">
+        <label for="id_ccv">{% trans "CVV" %} (<a href="{% media_url 'img/cvv.jpeg' %}" rel="facebox">what is this?</a>)</label>{{ form.ccv}}
+    </div>
+    {% if form.ccv.errors %}<div class="error" colspan="2">*** {{ form.ccv.errors|join:", " }}</div>{% endif %}
+
+    <div class="cl"></div>
+    
+    <div class="form_box" id="payment_terms_col">
+        {{ form.terms }}
+        <div id="terms_placement">
+            <label for="id_terms">I agree to <a href="#" onclick="window.open('{{ site_skin.toc_link }}'); return false;">{{ site_skin.toc_text }}</a></label>
+        </div>
+    </div>
+    {% if form.terms.errors %}<div class="error" colspan="2">*** {{ form.terms.errors|join:", " }}</div>{% endif %}
+
+    <div class="cl"></div>
+    
+    {% if not PAYMENT_LIVE %}
+    <script type="text/javascript" charset="utf-8">
+        $('#id_credit_number').val('4111111111111111');
+        $('#id_year_expires').val('2011');
+        $('#id_ccv').val('123');
+        // $('#id_terms').attr('checked', 'True');
+    </script>
+    {% endif %}
+    
+    <script src="{% media_url 'js/facebox.js' %}"></script>
+    <script type="text/javascript">
+        $(function() {
+            if ($('#id_credit_number').val() == '') {
+                $('#id_credit_type').val('Visa');   // default to visa
+            }
+            $('a[rel*=facebox]').facebox();
+        });
+    </script>
+    
+    <style>
+        form .error { font-size: 13px; font-weight: bold; }
+        #payment h2 { color: #FF0000;}
+    </style>
+{% endblock %}

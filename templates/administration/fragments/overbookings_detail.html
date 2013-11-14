@@ -1,0 +1,17 @@
+{% load custom_tags %}
+
+<h2>{{ tour.product.name }}</h2>
+
+<table>
+    <tr>
+        <th>Attempted At</th>
+        <th># Overbooked</th>
+    </tr>
+    {% for overbooking in overbookings %}
+        <tr>
+            <td>{{ overbooking.occurred_at }}</td>
+            <td>{{ overbooking.num_overbooked }}</td>
+        </tr>
+    {% endfor %}
+</table>
+

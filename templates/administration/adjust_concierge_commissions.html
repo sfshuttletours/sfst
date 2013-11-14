@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+    {% if concierges %}
+        <h1>Click on Concierge to edit Commissions</h1>
+        <h2>Filter: <input type="text" id="filter" /> </h2>
+        {% for concierge in concierges %}
+            <div class="concierge_small">
+                {% if concierge.contact.user %}
+                    <a href="/admin/concierges/concierge/{{ concierge.id }}/"><b>{{ concierge.contact.first_name }}</b> @ {{ concierge.hotel_name }}</a>
+                {% else %}
+                    <b>{{ concierge.contact.first_name }}</b> @ {{ concierge.hotel_name }} (no user account)
+                {% endif %}
+                {# {{ concierge.booking_type }} #}
+            </div>
+        
+        {% endfor %}
+    
+        <script type="text/javascript" charset="utf-8">
+            $('#filter').focus();
+            $.expr[':'].icontains = function(obj, index, meta, stack){
+                return (obj.textContent || obj.innerText || jQuery(obj).text() || '').toLowerCase().indexOf(meta[3].toLowerCase()) >= 0;
+            };
+
+            $('#filter').keyup(function(e) {
+               var val = $('#filter').val();
+               if (val.length > 0) {
+                   $('.concierge_small').hide();
+                   $('div.concierge_small a:icontains("' + val + '")').parent().show();
+               } else {
+                   $('.concierge_small').show();
+               }
+            });
+        </script>
+    {% else %}
+    
+        Edit here
+    
+    {% endif %}
+{% endblock content %}

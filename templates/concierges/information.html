@@ -1,0 +1,53 @@
+{% extends "concierges/base.html" %}
+
+{% block title %}Update Your Information | {{ concierge.name }}{% endblock title %}
+
+{% block concierge-content %}
+    <style type="text/css" media="screen">
+        th { width: 200px; }
+        input { width: 200px; }
+        div#information { float: left; }
+        div#password { float: left; margin-left: 50px;}
+        
+    </style>
+    <div id="information">
+        <h1>Update Your Information</h1>
+        {% if form.errors %}
+            <p class="red">There were errors with your form.  Please correct and resubmit the form.</p>
+            {{ form.non_field_errors }}
+        {% endif %}
+        <form action="." method="post" accept-charset="utf-8" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <th>Email:</th>
+                    <td>{{ concierge.contact.email }}</td>
+                </tr>
+                <tr>
+                    <th>Username:</th>
+                    <td>{{ concierge.contact.user.username }}</td>
+                </tr>
+                {{ form.as_table }}
+                <tr>
+                    <th></th>
+                    <td><input type="submit" name="info" value="Save Info" /></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="password">
+        <h2>Change Your Password</h2>
+        {% if password_form.errors %}
+            <p class="red">There were errors with your form.  Please correct and resubmit the form.</p>
+            {{ password_form.non_field_errors }}
+        {% endif %}
+        <form action="." method="post" accept-charset="utf-8">
+            <table>
+                {{ password_form.as_table }}
+                <tr>
+                    <td></td>
+                    <td><input type="submit" name="change_password" value="Change Password" /></td>
+                </tr>
+            </table>        
+        </form>
+    </div>
+{% endblock concierge-content %}

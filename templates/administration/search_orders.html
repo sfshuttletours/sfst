@@ -1,0 +1,94 @@
+{% extends "admin/base_site.html" %}
+
+{% load pagination_tags %}
+{% load ctags %}
+
+{% block title %}Order Detail{% endblock title %}
+
+
+{% block content %}
+    <style type="text/css" media="screen">
+        input {margin-right: 30pximp;}
+    </style>
+
+    <h1>Search Orders</h1>
+    <form action="" method="get" accept-charset="utf-8" id="id_order_search_form">
+        <label for="search">Order ID:</label>
+        <input type="text" name="order_id" value="{{ request.GET.order_id }}" class="small" />
+        <label for="search">First Name:</label>
+        <input type="text" name="fname" value="{{ request.GET.fname }}" />
+        <label for="search">Last Name:</label>
+        <input type="text" name="lname" value="{{ request.GET.lname }}" />
+        <label for="search">Order Date:</label>
+        <input type="text" name="order_date" value="{{ request.GET.order_date }}" class="small" />
+        <label for="search">Tour Date:</label>
+        <input type="text" name="tour_date" value="{{ request.GET.tour_date }}" class="small" />
+        <label for="status">Status:</label>
+        <select name="status">
+            <option value="0">----</option>
+            {% for id, status in Adjustment.STATUS_CHOICES %}
+                <option value="{{ id }}"{% if request.status == id %} selected{% endif %}>{{ status }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Go">
+        <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+    </form>
+
+    <script type="text/javascript" charset="utf-8">
+        $('input[name=order_date]').datepicker();
+        $('input[name=tour_date]').datepicker();
+    </script>
+
+    <br/><br/>
+
+    {% if orders %}
+        <div id="inventory_dates">
+            <table>
+                <tr>
+                    <th>Order ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Order Date</th>
+                    <th>Tours Ordered</th>
+                </tr>
+
+                {% autopaginate orders %}
+                {% paginate %}
+                {% for order in orders %}
+                    <tr class="{% cycle 'even' 'odd' %}">
+                        <td><a href="{% url order_detail order.id %}">{{ order.id }}</a></td>
+                        <td>{{ order.contact.first_name }}</td>
+                        <td>{{ order.contact.last_name }}</td>
+                        <td>{{ order.time_stamp|date:"m/d/Y" }}</td>
+                        <td class="tours_ordered">
+                            {% for item in order.orderitem_set.all %}
+                                {% with item.product.productvariation as variation %}
+                                {% with variation.parent.product as main_product %}
+                                {% with main_product.tourproduct as tour_product %}
+                                    {{ item.quantity|floatformat }} {{ variation.optionkey }}{{ item.quantity|pluralize }} for <a href="{% url inventory_detail %}?product={{ main_product.id }}">{{ tour_product.tour_type.name }}
+                                    on {{ tour_product.day|date:"m/d/Y" }}</a> at {{ tour_product.pretty_time }}
+                                    {% if item.adjustment %}
+                                        <span class="red">{{ item.adjustment.get_status_display|upper }}</span>
+                                    {% endif %}
+                                    <br /><br />
+                                {% endwith %}
+                                {% endwith %}
+                                {% endwith %}
+
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="cl"></div>
+            {% paginate %}
+        </div>
+    {% else %}
+        {% if search_conducted %}
+            <p>There are no orders that match that criteria. Please try again.</p>
+        {% else %}
+            <p>Search all the orders using the above criterion.</p>
+        {% endif %}
+    {% endif %}
+
+{% endblock content %}

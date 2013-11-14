@@ -1,0 +1,92 @@
+[
+    {
+        "pk": 1, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - 5 Hour City Tour"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - Alcatraz only"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - combo city, muir + alcatraz"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - combo wine plus alcatraz"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - Monterey Cruiser Tour"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - Monterey/Alcatraz Combo"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - Muir Woods (only) Tour"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - Muir Woods/City Tour Package"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "product.optiongroup", 
+        "fields": {
+            "description": "", 
+            "sort_order": 0, 
+            "site": 1, 
+            "name": "Age - Wine Country Napa Tour"
+        }
+    }
+]

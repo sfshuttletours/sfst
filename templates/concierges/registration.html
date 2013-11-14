@@ -1,0 +1,239 @@
+{% extends "concierges/base.html" %}
+
+{% block content %}
+    <style type="text/css" media="screen">
+        .box-container { width: 900px;}
+        .box { border: 1px solid #888; float: left; margin-bottom: 5px;}
+        .small { width: 400px; min-height: 125px; margin-right: 5px;}
+        .large { width: 807px; padding-bottom: 10px;}
+        .box h5 {color: #000; margin: 5px 0 5px 10px; text-transform: none; letter-spacing: normal; font-size: 12px;}
+        table { margin-left: 15px;}
+        th, td { padding: 0; border: none;}
+        th { width: 100px; font-weight: normal;}
+        .large th { width: auto; padding-right: 20px;}
+        td input { width: 250px;}
+        .large p { margin-left: 15px;}
+        .large p input { margin-right: 10px;}
+        
+    </style>
+
+    <div class="box-container">
+        {% if site_skin.concierge_lp_content %}
+            {{ site_skin.concierge_lp_content|safe }}
+        {% else %}
+            <h2>Welcome to {{ site_skin.name }} Concierge Account registration.</h2>
+            <p>
+                By creating this account with us, you will be able to easily book tours online directly through our system, as well as track your commission sales and request brochures for your hotel. This will ensure that you receive credit for all of the customers that you book on our tours. We look forward to making the entire process as easy as possible for you.
+            </p>
+        {% endif %}
+        {% if success %}
+            <p class="green">
+                You have successfully registered.  You may now <a href="{% url auth_login %}">login to your account</a>.
+            </p>
+        {% else %}
+            <h4>Please fill out the information below. OR Account holders can <a href="{% url auth_login %}">LOGIN HERE</a></h4>
+            <form action="" method="post" accept-charset="utf-8">
+                {% if form.errors %}
+                    <p class="red">There were errors with your form.  Please correct and submit the form again.</p>
+                    {{ form.non_field_errors }}
+                {% endif %}
+                <div class="box small">
+                    <h5>Your Information</h5>
+                    <table>
+                        <tr>
+                            <th>{{ form.first_name.label }}</th>
+                            <td>
+                                {{ form.first_name.errors }}
+                                {{ form.first_name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.last_name.label }}</th>
+                            <td>
+                                {{ form.last_name.errors }}
+                                {{ form.last_name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.email.label }}</th>
+                            <td>
+                                {{ form.email.errors }}
+                                {{ form.email }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.phone.label }}</th>
+                            <td>
+                                {{ form.phone.errors }}
+                                {{ form.phone }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+        
+                <div class="box small">
+                    <h5>Your Address</h5>
+                    <table>
+                        <tr>
+                            <th>{{ form.street.label }}</th>
+                            <td>
+                                {{ form.street.errors }}
+                                {{ form.street }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.city.label }}</th>
+                            <td>
+                                {{ form.city.errors }}
+                                {{ form.city }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.state.label }}</th>
+                            <td>
+                                {{ form.state.errors }}
+                                {{ form.state }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.postal_code.label }}</th>
+                            <td>
+                                {{ form.postal_code.errors }}
+                                {{ form.postal_code }}
+                            </td>
+                        </tr>
+                    </table>        
+                </div>
+        
+                <div class="box small cl">
+                    <h5>Hotel Information</h5>
+                    <table>
+                        <tr>
+                            <th>{{ form.hotel_name.label }}</th>
+                            <td>
+                                {{ form.hotel_name.errors }}
+                                {{ form.hotel_name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.hotel_phone.label }}</th>
+                            <td>
+                                {{ form.hotel_phone.errors }}
+                                {{ form.hotel_phone }}
+                            </td>
+                        </tr>
+                    </table>
+        
+                </div>
+        
+                <div class="box small">
+                    <h5>Hotel Address</h5>
+                    <table>
+                        <tr>
+                            <th>{{ form.hotel_street.label }}</th>
+                            <td>
+                                {{ form.hotel_street.errors }}
+                                {{ form.hotel_street }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.hotel_city.label }}</th>
+                            <td>
+                                {{ form.hotel_city.errors }}
+                                {{ form.hotel_city }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.hotel_state.label }}</th>
+                            <td>
+                                {{ form.hotel_state.errors }}
+                                {{ form.hotel_state }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.hotel_postal_code.label }}</th>
+                            <td>
+                                {{ form.hotel_postal_code.errors }}
+                                {{ form.hotel_postal_code }}
+                            </td>
+                        </tr>
+                    </table>        
+        
+                </div>
+        
+                <div class="box large">
+                    <h5>Enter and confirm your password choice below</h5>
+                    <table>
+                        <tr>
+                            <th>{{ form.username.label }}</th>
+                            <td>
+                                {{ form.username.errors }}
+                                {{ form.username }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.password1.label }}</th>
+                            <td>
+                                {{ form.password1.errors }}
+                                {{ form.password1 }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.password2.label }}</th>
+                            <td>
+                                {{ form.password2.errors }}
+                                {{ form.password2 }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+        
+                <div class="box large">
+                    <h5>Notification behaviours</h5>
+                    <p>
+                        {{ form.email_notifications.errors }}
+                        {{ form.email_notifications }}
+                        {{ form.email_notifications.label }}
+                    </p>
+                    <p>
+                        {{ form.send_checks_to_bool.errors }}
+                        {{ form.send_checks_to_bool }}
+                        {{ form.send_checks_to_bool.label }}
+                    </p>            
+                </div>
+        
+                <div class="box large">
+                    <h5>Extra information</h5>
+                    <table>
+                        <tr>
+                            <th>{{ form.frequency.label }}</th>
+                            <td>
+                                {{ form.frequency.errors }}
+                                {{ form.frequency }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ form.per_week.label }}</th>
+                            <td>
+                                {{ form.per_week.errors }}
+                                {{ form.per_week }}
+                            </td>
+                        </tr>
+                    </table>        
+                </div>
+        
+                <div class="box large">
+                    <h5>Booking Preference Type</h5>
+                    <p class="red">
+                        PLEASE NOTE that you cannot change your booking preference type once setup.
+                    </p>
+                    <p>
+                        {{ form.booking_type.errors }}
+                        {{ form.booking_type }}
+                    </p>
+                </div>
+                <input type="submit" value="Join Now" class="left cl" style="margin-left: 360px" />
+            </form>
+        {% endif %}
+    </div>
+{% endblock content %}

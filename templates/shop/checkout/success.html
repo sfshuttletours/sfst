@@ -1,0 +1,18 @@
+{% extends "shop/base.html" %}
+{% load i18n %}
+{% load satchmo_order %}
+{% load satchmo_google %}
+
+
+{% block content %}
+    <div id="ordersuccess">
+        <h4>Thank you for your order!</h4>
+        <p>Please <a href="#" onclick="window.print(); return false;">print out this page</a> as a receipt.  You will also receive an email with this information.</p>
+    </div>
+    
+    {% include "shop/pretty_confirmation.html" %}
+    
+    <!-- Conversion page tracking code -->
+    {{ site_skin.conversion_code|safe }}
+
+{% endblock %}

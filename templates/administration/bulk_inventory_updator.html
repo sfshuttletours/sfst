@@ -1,0 +1,42 @@
+{% extends "admin/base_site.html" %}
+
+{% load ctags %}
+
+{% block content %}
+    <style>
+        #id_inventory { width: 30px; }
+    </style>
+    
+    {% if success %}
+        <p class="green">
+            Inventory successfully updated!
+        </p>
+    {% endif %}
+    
+    <h1>Update total seats available in tours</h1>
+    <h2>WARNING: be careful :-)</h2>
+    <form action="{% url bulk_inventory_updator %}" method="POST">
+        {{ form.non_field_errors }}
+        {{ form.tour_schedule.errors }}Choose tour schedule/time: {{ form.tour_schedule }}<br/>
+        {{ form.inventory.errors }}Override inventory to: {{ form.inventory }}<br/>
+        Between dates: {{ form.start_date.errors }}{{ form.start_date }} to {{ form.end_date.errors }}{{ form.end_date }}<br/>
+        {{ form.days_of_week.errors }}{{ form.days_of_week }}<br/>
+        
+        <input type="submit" value="Update" />
+        <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+    </form>
+    
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+            $('#id_start_date').datepicker({numberOfMonths: 3});
+            $('#id_end_date').datepicker({numberOfMonths: 3});
+        });
+        
+        $(function() {
+            $('form').submit(function() {
+                $('form input[type=submit]').attr('disabled', true);
+                $('form img').show();
+            });
+        });
+    </script>
+{% endblock %}

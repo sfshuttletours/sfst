@@ -1,0 +1,99 @@
+{% extends "concierges/base.html" %}
+{% load ctags %}
+
+{% block title %}Welcome {{ concierge.name }}!{% endblock title %}
+
+
+{% block concierge-content %}
+    <link href="{% media_url 'css/facebox.css' %}" media="screen, print" rel="stylesheet" type="text/css" />
+    
+    <div id="concierge-home">
+        <h3>Messaging</h3>
+        <div id="messaging">
+            <div id="from_sfst">
+            	<h1>From {{ concierge.site_skin.name }}</h1>
+                {{ global_message }}
+            </div>
+            
+            {% for message in other_messages %}
+                <div class="note_wrapper">
+                    {% if message.message %}
+                        <a class="clear_link" href="#" onclick="clear_message({{ message.id }}); return false;">[ clear ]</a>
+                    {% endif %}
+                    <div class="note" onclick="update_message_facebox({{ message.id }});">
+                        {% if message.message %}
+                            {{ message.message|linebreaksbr }}
+                            <div class="last_updated">Posted: {{ message.last_updated|date:'M d, Y' }}</div>
+                        {% else %}
+                            type freely here
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            
+            {% if other_messages|length == 0 %}
+                <div class="note" onclick="update_message_facebox();">type here freely</div>
+                <div class="note" onclick="update_message_facebox();">type here freely</div>
+                <div class="note" onclick="update_message_facebox();">type here freely</div>
+            {% endif %}
+            
+            {% if other_messages|length == 1 %}
+                <div class="note" onclick="update_message_facebox();">type here freely</div>
+                <div class="note" onclick="update_message_facebox();">type here freely</div>
+            {% endif %}
+            
+            {% if other_messages|length == 2 %}
+                <div class="note" onclick="update_message_facebox();">type here freely</div>
+            {% endif %}
+            
+        </div>
+        <h3 style="border-top: 1px solid #888;">Book Tours Here</h3>
+        <div id="book-tours" class="cl">
+        	<div id="book-tours">
+    		    {% for cat in tour_categories %}
+    		        <div class="tour_category">
+    		            <h2>{{ cat.name }}</h2>
+    		            {% for cat2, tours in cat_to_tour_map.items %}
+    		                {% if cat2 == cat %}
+    		                    <div style="margin-left: 20px;">
+    		                    {% for tour_type in tours %}
+    		                        <div class="productImage">    
+    		                           <div class="image">
+    		                              <a href="{{ tour_type.get_absolute_url }}?CODE={{ concierge.code }}&skin={{ concierge.site_skin.code }}" title="{{ tour_type.name }}">
+    		                                  {% if tour_type.image %}<img src="{{ tour_type.image.url }}" alt="{{ tour_type.name }}" />{% endif %}
+    		                              </a>            
+    		                           </div>
+    		                            <p>
+    		                                <a href="{{ tour_type.get_absolute_url }}?CODE={{ concierge.code }}&skin={{ concierge.site_skin.code }}" title="{{ tour_type.name }}">{{ tour_type.name }}</a>
+    		                            </p>
+    		                        </div>
+    		                    {% endfor %}
+    		                    </div>
+    		                    <div class="cl"></div>
+    		                {% endif %}
+    		            {% endfor %}
+    		        </div>
+    		    {% endfor %}
+		    </div>
+        </div>
+
+    </div> <!-- end concierge-home -->
+
+    <script src="{% media_url 'js/facebox.js' %}"></script>
+    <script>
+        function update_message_facebox(message_id) {
+            url = '{% url concierges_update_message %}';
+            if (message_id != undefined) {
+                url += '?message_id=' + message_id;
+            }
+            $.get(url, function(data) { $.facebox(data); });
+        }
+        
+        /* blank out the message */
+        function clear_message(message_id) {
+            $.post("{% url concierges_clear_message %}", {'message_id': message_id}, function(data) {
+                window.location = '{{ request.path }}';
+            }, 'json');
+        }
+    </script>
+{% endblock concierge-content %}

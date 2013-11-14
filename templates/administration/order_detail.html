@@ -1,0 +1,287 @@
+{% extends "admin/base_site.html" %}
+{% load normalize_decimal %}
+{% load satchmo_currency ctags %}
+
+{% block title %}Order Search{% endblock title %}
+
+
+{% block content %}
+    <link rel="stylesheet" href="{% media_url 'css/fancybox/jquery.fancybox-1.3.1.css' %}" type="text/css" media="screen" />
+    <script src="{% media_url 'js/jquery.fancybox-1.3.1.pack.js' %}"></script>
+
+    <h1>Order #{{ order.id }} <a href="{% url order_email_customer order.id %}" class="button fancybox">Email Customer</a></h1>
+
+    <table>
+        <tr>
+            <th>Customer Adjustments</th>
+            <td><a href="{% url customer_order_detail order.orderhash.hash %}" target="_blank">Adjust</a></td>
+        </tr>
+        <tr>
+            <th>Contact</th>
+            <td>{{ contact.full_name }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ contact.email }}</td>
+        </tr>
+        <tr>
+            <th>Order Timestamp</th>
+            <td>{{ order.time_stamp }}</td>
+        </tr>
+        {% for phone in contact.phonenumber_set.all %}
+            {% if phone.phone %}
+                <tr>
+                    <th>{{ phone.type }} Phone</th>
+                    <td>{{ phone.phone }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        {% for address in contact.addressbook_set.all %}
+            {# Legacy Manual Addresses were all stored as ., lovely huh?  #}
+            {% if address.street1 != '.' and address.street1 %}
+                <tr>
+                    <th>{% if address.is_default_shipping %}Shipping{% else %}Billing{% endif %} Address</th>
+                    <td>{{ contact.full_name }}<br />
+                        {{ address.street1 }}{% if address.street2 %}<br />{{ address.street2 }}{% endif %}<br />
+                        {{ address.city }}, {{ address.state }} {{ address.postal_code }}<br />
+
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        <tr>
+            <th>Notes:</th>
+            <td>
+                <span id="notes">{{ order.notes }}</span>
+                <form method="post" action="." style="display: none;" id="edit_notes">
+                    <textarea name="notes" style="width:400px;height:200px;">{{ order.notes }}</textarea>
+                    <input type="submit" value="Save" />
+                    <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+                </form>
+                <br />
+                <a href="#" onclick="$('span#notes').hide();$('form#edit_notes').dialog({width:450});return false;">Edit Notes</a>
+
+            </td>
+        </tr>
+        {% if order.AFFILIATE %}
+            <tr>
+                <th>Affiliate:</th>
+                <td>{{ order.AFFILIATE.handle }}</td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <h2>Payment Details</h2>
+    {% for payment in order.payments.all %}
+        Paid {{ payment.amount|currency }} on {{ payment.time_stamp }} via {{ payment.payment }}: Transaction ID: {{ payment.transaction_id }}
+        {% with payment.credit_card as cc %}
+            {% if cc %}
+            <br />Credit Card Info: {{ cc.credit_type }} {% if cc.display_cc %}*{{ cc.display_cc }}{% endif %} {{ cc.expire_month }}/{{ cc.expire_year }} {{ cc.card_holder }}
+            {% endif %}
+        {% endwith %}
+        <br />
+    {% endfor %}
+
+    <h2>Order Details</h2>
+
+    <form action="." method="post" id="adjustment_form">
+        <table>
+            <tr>
+                <th><span class="adjust">Adjust?</span></th>
+                <th>Name</th>
+                <th>Tour Date</th>
+                <th>Ticket Type</th>
+                <th>Quantity</th>
+    	        <th>Price</th>
+                <th align="center">Total</th>
+            </tr>
+            {% for item in order.orderitem_set.all %}
+                {% with item.product.productvariation as variation %}
+                {% with variation.parent.product as main_product %}
+                {% with main_product.tourproduct as tour_product %}
+                    <tr>
+                        <td id="adjust_{{ item.id }}">
+                            <span class="adjust">
+                            {% if not tour_product.tour_type.is_combo %}
+                                <input type="checkbox" value="{{ item.id }}" name="item" />
+                            {% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            {% if tour_product %}
+                                {{ tour_product.tour_type.name }}
+                            {% else %}
+                                {{ item.product.tourproduct.tour_type.name }}
+                            {% endif %}
+
+                        </td>
+                        <td>
+                            {% if tour_product %}
+                                {{ tour_product.day|date:"M d, Y" }} at {{ tour_product.pretty_time }}
+                            {% else %}
+                                {{ item.product.tourproduct.day|date:"M d, Y" }} at {{ item.product.tourproduct.pretty_time }}
+                            {% endif %}
+                        </td>
+                        <td>{{ variation.optionkey }}</td>
+                        <td>{{ item.quantity|normalize_decimal }}</td>
+            			<td align="right">{{ item.unit_price|currency }}</td>
+                        <td align="right">{{ item.line_total|currency }}</td>
+                    </tr>
+                    {% if item.STATUS %}
+                    <tr>
+                        <td colspan="7">
+                            <ol>
+                            {% for history in item.adjustment.history.all %}
+                                <li>
+                                {% if history.from_status %}
+                                    Changed from <strong>{{ history.get_from_status_display }}</strong> to <strong>{{ history.get_to_status_display }}</strong>
+                                {% else %}
+                                    Status set to <strong>{{ history.get_to_status_display }}</strong>
+                                {% endif %}
+                                on {{ history.timestamp }} by {% if history.user %}{{ history.user.username }}{% else %}the customer{% endif %}
+                                {% if history.notes %}
+                                    <!-- <a class="see_notes" id="see_{{ history.id }}" href="#" >See Notes</a> -->
+                                    <br/>
+                                    <div id="note_{{ history.id }}"><b>Notes:</b> {{ history.notes|linebreaksbr }}</div>
+                                {% endif %}
+                                </li>
+                                <br/>
+                            {% endfor %}
+                            </ol>
+                            <strong>Current Status:</strong> {{ item.STATUS|upper }}<br />
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endwith %}
+                {% endwith %}
+                {% endwith %}
+            {% endfor %}
+            <tr>
+                <td colspan="6" align="right">Total:</td>
+                <td>{{ order.total|currency }}</td>
+            </tr>
+            <tr>
+                <td colspan="6" align="right">Total Paid:</td>
+                <td>{{ order.balance_paid|currency }}</td>
+            </tr>
+            <tr>
+                <td colspan="6" align="right">Total Owed:</td>
+                <td>{{ order.balance_forward }}</td>
+            </tr>
+        </table>
+        <div id="adjustments">
+            <ul>
+                {% if free_order %}
+                    <li><a href="{% url adjustment_main order.id 'delete' %}">Delete</a></li>
+                {% else %}
+                    <li><a href="{% url adjustment_main order.id 'request_refund' %}">Request Void/Refund</a></li>
+                {% endif %}
+                <li><a href="{% url adjustment_main order.id 'move' %}">Change Date/Time</a></li>
+                <li><a href="{% url adjustment_main order.id 'make_credit_voucher' %}">Vouchers</a></li>
+                {% if user.is_superuser and void_refund_request %}
+                    <li><a href="{% url adjustment_main order.id 'refund' %}">Refund/Void</a></li>
+                {% endif %}
+            </ul>
+            <div id="panel">
+
+            </div>
+            <script type="text/javascript" charset="utf-8">
+                $('.adjust').hide();
+                $(document).ready(function() {
+                    $('a.fancybox').fancybox({
+                        'width': 600,
+                        'autoDimensions': false
+                    });
+
+                    var $form = $('form#adjustment_form');
+
+                    function update_times() {
+                        var selected_tour_type_id = $('select#id_tour_type').val();
+                        var dateText = $('input#id_day').val();
+                        var ajax_url = '{% url ajax_get_schedule 0 %}';
+                        ajax_url = ajax_url.replace('0', selected_tour_type_id);
+                        $.getJSON(ajax_url, {'selected_date': dateText}, function(data){
+                            var $select = $('select#id_tour_schedule');
+                            $select.empty();
+                            $.each(data.schedules, function(idx, schedule){
+                                $select.append('<option value="'+schedule.id+'">'+schedule.time+'</option>');
+                            });
+                        });
+
+                    }
+
+
+
+                    function on_date_select(dateText, instance) {
+                        // Adds right options for Tour Time on the Move screen
+                        $('input#id_day').val(dateText);
+                        update_times();
+                    }
+
+                    function refresh_panel(html) {
+                        $('div#panel').html(html);
+
+                        // If there is an error about the items select, django puts selected items back into the
+                        // form html as hidden fields so user can never adjust item inputs again.
+                        $('div#panel input[name=item]').remove();
+
+                        // We are Moving
+                        if ($('div#panel #id_day').length) {
+                            // Add date selector event for Move option
+                            $('input#id_day').datepicker({onSelect: on_date_select});
+                            $('select#id_tour_type').change(update_times);
+                            update_times();
+
+                        }
+                    }
+
+                    // $("div#panel").hide();
+                    $("div#adjustments ul li a").click(function(e){
+                        $('.adjust').show();
+                        var a = $(this);
+                        $form.attr('action', a.attr('href'));
+                        $.getJSON(a.attr('href'), function(data){
+                            if (data.success) {
+                                refresh_panel(data.html);
+                            }
+                        });
+                        return false;
+                    });
+
+                    $form.live('submit', function() {
+                        var form_values = $(this).serializeArray();
+                        $.post($form.attr('action'), form_values, function(data){
+                            if (data.success) {
+                                if (data.redirect) {
+                                    document.location = document.location;
+                                }
+                            } else {
+                                refresh_panel(data.html);
+                            }
+                        });
+                        return false;
+                    });
+
+                    $('div.notes').dialog({autoOpen: false, width: 500});
+                    // $('a.see_notes').click(function(){
+                    //     var note_id = 'note_' + $(this).attr('id').replace('see_', '');
+                    //     $('div#' + note_id).dialog('open');
+                    //     return false;
+                    // });
+
+                });
+
+            </script>
+        </div>
+    </form>
+
+    {% if contact.other_orders %}
+    <h2>Other Orders from {{ contact.full_name }}</h2>
+        <ul>
+            {% for o in contact.other_orders %}
+                <li><a href="{% url order_detail o.id %}">{{ o.id }} on {{ o.time_stamp|date:"m/d/Y" }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends "shop/base.html" %}
+{% load ctags %}
+
+{% block navbar %}
+   {# <li class="first">{% trans "Home" %}</li> #}
+{% endblock %}
+
+{% block content %}
+    {% if cart.numItems %}
+        <div id="view-cart-link">
+            <a href="{% url satchmo_cart %}">
+                <img src="{% media_url 'img/cart.png' %}" /> View Cart
+            </a>
+        </div>
+    {% endif %}
+<div id="home">
+    <h1>Select A Tour</h1>
+    
+    {% for cat in tour_categories %}
+        <div class="tour_category">
+            <h2>{{ cat.name }}</h2>
+            {% for cat2, tours in cat_to_tour_map.items %}
+                {% if cat2 == cat %}
+                    <div style="margin-left: 20px;">
+                    {% for tour_type in tours %}
+                        <div class="productImage">    
+                           <div class="image">
+                              <a href="{{ tour_type.get_absolute_url }}" title="{{ tour_type.name }}">
+                                  {% if tour_type.image %}<img src="{{ tour_type.image.url }}" alt="{{ tour_type.name }}" />{% endif %}
+                              </a>            
+                           </div>
+                            <p>
+                                <a href="{{ tour_type.get_absolute_url }}" title="{{ tour_type.name }}">{{ tour_type.name }}</a>
+                            </p>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <div class="cl"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+    
+    <div class="cl"></div>
+</div>
+{% endblock %}

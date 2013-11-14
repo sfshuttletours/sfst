@@ -1,0 +1,50 @@
+{% load ctags %}
+
+<style>
+    .taken_sales { display: {% if is_concierge_order %}block{% else %}none{% endif %};}
+</style>
+
+<div class="checkin_modal">
+    <form action="{% url edit_customer_checkin %}" method="POST">
+
+        <h2>{{ order_checkin.order.contact }}</h2>
+
+        <input type="hidden" name="order_checkin_id" value="{{ order_checkin.id }}" />
+        <input type="hidden" name="product_id" value="{{ product.id }}" />
+
+        {% for field in order_checkin_form %}
+            {% if field.label == order_checkin_form.amount_taken_sales.label %}<div class="taken_sales">{% endif %}
+            {{ field.label }} {{ field }}<br/>
+            {% if field.label == order_checkin_form.amount_taken_sales.label %}</div>{% endif %}
+        {% endfor %}
+
+        <br/>
+
+        {% for item_checkin in order_item_checkins %}
+            {{ item_checkin.order_item.product.productvariation.optionkey }}
+            <select name="order_item_checkin_{{ item_checkin.id }}">
+                {% for j in item_checkin.quantity_range_list %}
+                    <option {% if item_checkin.num_checkedin == j %}selected="true"{% endif %}>{{ j }}</option>
+                {% endfor %}
+            </select>
+            <br/>
+        {% endfor %}
+
+        <br/>
+
+        <input type="submit" value="Save" />
+        <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        (new FormHelper()).bind_for_ajax(function(data) {
+            // update customer counter
+            $('#num_customers_checked_in').html(data.num_customers_checkedin);
+            $('#num_customers_expected').html(data.num_customers_expected);
+            $('#num_seats_available_for_walkins').html(data.num_seats_available_for_walkins);
+    	    $.fancybox.close(); // since this fragment is open in a Fancybox right now.
+        });
+    });
+</script>

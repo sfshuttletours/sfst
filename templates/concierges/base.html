@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load thumbnail %}
+
+
+{% block content_title %}
+    {% if concierge %}
+        <div id="concierge-header">
+            <div class="left">
+                {% thumbnail concierge.image "150x150" as image %}
+                    {% if image %}
+                        <img src="{{ image.url }}" alt="{{ concierge.name }}" />
+                    {% endif %}
+                {% endthumbnail %}
+            </div>
+
+            <div class="left">
+                <h1>{{ concierge.name }}</h1>
+                <h2>{{ concierge.hotel_name }}</h2>
+            </div>
+            <div class="cl"></div>
+        </div>
+    {% endif %}
+{% endblock content_title %}
+
+{% block content %}
+    <div id="concierge-content">
+        {% block concierge-content %}
+            
+        {% endblock concierge-content %}
+    </div>
+{% endblock content %}

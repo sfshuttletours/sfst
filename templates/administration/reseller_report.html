@@ -1,0 +1,145 @@
+{% extends "admin/base_site.html" %}
+
+{% load satchmo_currency %}
+{% load ctags %}
+
+{% block title %}{{ reseller.company_name }} Report {{ start_date|date:"m/d/Y" }} - {{ end_date|date:"m/d/Y" }}{% endblock title %}
+
+
+{% block content %}
+    <div class="controls">
+        <h1>{{ reseller.company_name }} Report {{ start_date|date:"m/d/Y" }} - {{ end_date|date:"m/d/Y" }}</h1>
+        <form action="." method="GET">
+            Select date range:
+            <input type="text" name="start_date" id="start_date" value="{{ start_date|date:'m/d/Y' }}" /> to
+            <input type="text" name="end_date" id="end_date" value="{{ end_date|date:'m/d/Y' }}" />
+            <input type="submit" value="Go" />
+            <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+        </form>
+        <div>
+            <strong>Or jump to:</strong>
+            {% for day in recent_months %}
+                <a href="{% url reseller_report reseller.id %}?day_in_month={{ day|date:"m/d/Y" }}">{{ day|date:"F Y" }}</a> {% if not forloop.last %}|{% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div id="printable-invoice">
+        <h1>{{ reseller.company_name }} Invoice</h1>
+        <h2>{{ orders|length }} orders found!</h2>
+        <table>
+            <tr>
+                <th>Full Name</th>
+                <th>Company Name</th>
+                <th>
+                    {% if total_reseller_pays %}Discount{% endif %}
+                    {% if total_reseller_commission %}Commission{% endif %}
+                </th>
+            </tr>
+            <tr>
+                <td>{{ reseller.contact.first_name }} {{ reseller.contact.last_name }}</td>
+                <td>{{ reseller.company_name }}</td>
+                <td>
+                    {% if total_reseller_pays %}{{ reseller.discount|floatformat }}%{% endif %}
+                    {% if total_reseller_commission %}{{ reseller.commission|floatformat }}%{% endif %}
+                </td>
+            </tr>
+        </table>
+
+        {% if orders %}
+            <table id="orders">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Order Date</th>
+                    <th>Tour</th>
+                    <th>Tickets</th>
+                    <th>Amount Paid</th>
+                </tr>
+                {% for order in orders %}
+                    {% for item in order.orderitem_set.all %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.contact.first_name }} {{ order.contact.last_name }}</td>
+                            <td>{{ order.time_stamp|date:"m-d-Y" }}</td>
+                            <td>
+                                {% with item.product.productvariation.parent.product.tourproduct as tp %}
+                                    {% if tp %}
+                                        {{ tp.tour_type.name }} on {{ tp.day|date:"M d, Y" }} at {{ tp.pretty_time }}
+                                    {% else %}
+                                        {{ item.product }}
+                                    {% endif %}
+
+                                {% endwith %}
+                            </td>
+                            <td>
+                                {{ item.quantity|floatformat }}
+                                {% if item.product.productvariation %}{{ item.product.productvariation.optionkey }}{% else %}Ticket{% endif %}{{ item.quantity|pluralize }}<br />
+                            </td>
+                            <td class="aright">{{ item.line_item_price|currency }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                <tr>
+                    <td colspan="6"></td>
+                </tr>
+                <tr>
+                    <td colspan="6"></td>
+                </tr>
+                <tr>
+                    <td colspan="6"></td>
+                </tr>
+                <tr>
+                    <th colspan="5" class="aright">Tickets Purchased:</th>
+                    <td class="aright">{{ total_tickets|floatformat }}</td>
+                </tr>
+                <tr>
+                    <th colspan="5" class="aright">Ticket Total:</th>
+                    <td class="aright">{{ total_cost|currency }}</td>
+                </tr>
+                {% if total_reseller_pays %}
+                    <tr>
+                        <th colspan="5" class="aright">Total With Discount:</th>
+                        <td class="aright">{{ total_reseller_pays|currency }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if total_reseller_commission %}
+                <tr>
+                    <th colspan="5" class="aright">Total Commission:</th>
+                    <td class="aright">{{ total_reseller_commission|currency }}</td>
+                </tr>
+                {% endif %}
+
+                <tr>
+                    <th colspan="5" class="aright">Invoice amount:</th>
+                    <td class="aright">{{ invoice_amount|currency }}</td>
+                </tr>
+            </table>
+        {% else %}
+        <p>No orders for this time period.</p>
+        {% endif %}
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p id="sfst-address">
+            {% for address in reseller.contact.addressbook_set.all %}
+                {{ reseller.contact }}<br/>
+                {{ address.street1 }}{% if address.street2 %}<br />{{ address.street2 }}{% endif %}<br />
+                {{ address.city }}, {{ address.state }} {{ address.postal_code }}<br />
+				{{ reseller.contact.email }}<br/>
+            {% endfor %}
+
+        	<h5>Please remit payment to:</h5>
+			SF Comprehensive Tours, LLC<br/>
+			268 Bush# 4407<br/>
+			SF, CA 94104<br/>
+        </p>
+    </div>
+
+    <script type="text/javascript" charset="utf-8">
+        $('input#start_date').datepicker({numberOfMonths: 3});
+        $('input#end_date').datepicker({numberOfMonths: 3});
+    </script>
+
+{% endblock content %}

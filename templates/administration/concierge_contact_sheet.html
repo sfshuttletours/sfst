@@ -1,0 +1,60 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+    <style>
+        #inventory_dates table td, #inventory_dates table th { max-width: 450px; min-width: 120px; }
+        
+        td img { height: 80px; }
+    </style>
+    
+    <h1>Access all Concierge Accounts</h1>
+    <h2>Filter: <input type="text" id="filter" /> </h2>
+    <h3>Sort by: <a href="{{ request.path }}?sort_by=name">Name</a> | <a href="{{ request.path }}?sort_by=rev">12 month $</a></h3>
+    
+    <div id="inventory_dates">
+        <table>
+            <tr>
+                <th>Concierge</th>
+                <th>Total $</th>
+                <th>12 months $</th>
+                <th>Date Joined</th>
+            </tr>
+            
+            {% for concierge in concierges %}
+            <tr class="row {% cycle 'even' 'odd' %}">
+                <td>
+                    <img src="{{ concierge.get_image_url }}" />
+                    <div>
+                        <h3>{{ concierge.handle }}</h3>
+                        <a href="mailto://{{ concierge.contact.email }}">{{ concierge.contact.email }}</a><br />
+                        {% if concierge.home_address %}
+                            {{ concierge.home_address|safe }}<br />
+                        {% endif %}
+                    </div>
+                </td>
+                <td>${{ concierge.total_revenue }}</td>
+                <td>${{ concierge.months_12_revenue }}</td>
+                <td>{{ concierge.contact.user.date_joined|date:"M d, Y" }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+        $('#filter').focus();
+        $.expr[':'].icontains = function(obj, index, meta, stack){
+            return (obj.textContent || obj.innerText || jQuery(obj).text() || '').toLowerCase().indexOf(meta[3].toLowerCase()) >= 0;
+        };
+
+        $('#filter').keyup(function(e) {
+           var val = $('#filter').val();
+           if (val.length > 0) {
+               $('#inventory_dates tr.row:visible').hide();
+               $('#inventory_dates h3:icontains("' + val + '")').parent().parent().parent().show();
+           } else {
+               $('#inventory_dates tr.row').show();
+           }
+        });
+    </script>
+{% endblock content %}

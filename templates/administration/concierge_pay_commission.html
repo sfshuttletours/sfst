@@ -1,0 +1,42 @@
+{% extends "admin/base_site.html" %}
+
+{% load ctags %}
+
+{% block content %}
+    <div class="controls">
+        <h1>Pay Commissions for {{ label }}</h1>
+        <form action="." method="GET">
+            Select date range:
+            <input type="text" name="start_date" id="start_date" value="{{ start_date|date:'m/d/Y' }}" /> to
+            <input type="text" name="end_date" id="end_date" value="{{ end_date|date:'m/d/Y' }}" />
+            <input type="submit" value="Go" />
+            <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+        </form>
+
+        <div>
+            <strong>Or jump to:</strong>
+            {% for day, month, half in recent_periods %}
+                <a href="{% url concierge_pay_commission %}?day={{ day|date:"m/d/Y" }}">
+                    {{ month }} ({{ half }})
+                </a> {% if not forloop.last %}|{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <br/><br/>
+
+    {% for c in concierges %}
+    <div style="padding: 5px 10px; float: left;">
+        <a href="{% url concierge_commission_print c.id %}?start_date={{ start_date|date:"m/d/Y" }}&end_date={{ end_date|date:"m/d/Y" }}" target="_blank" style="font-size: 14px;">
+            {{ c.name }} @ {{ c.hotel_name }}
+        </a>
+    </div>
+    {% endfor %}
+
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+            $('input#start_date').datepicker({numberOfMonths: 3});
+            $('input#end_date').datepicker({numberOfMonths: 3});
+        });
+    </script>
+{% endblock %}

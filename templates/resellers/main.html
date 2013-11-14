@@ -1,0 +1,50 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div id="resellers">
+    {{ site_skin.reseller_lp_content|safe }}
+    
+    <br/>
+    <h3>Here is how the process works:</h3> 
+    <div style=margin-left:15px;> 
+       <b>1)</b> Submit a reseller application (below)<br> 
+
+
+       <b>2)</b> Let us know what type of reseller you'd like to be from the following three choices:<br><br> 
+       <div style=margin-left:15px;> 
+          <b>a)</b> Commission Check Reseller - You're using our credit card processing and you will get paid commission checks on a monthly basis. You will be given a LOGIN and a PASSWORD to check your commission reseller reports anytime. Then all you will do is print out your reseller reports (on a monthly basis) and email them to us and we will mail you a monthly check.
+          <br><br> 
+          <b>b)</b> Mark-up Reseller – You’re using our Credit Card Processing and will be given lower net rates to then mark up those sales to your clients. Once a sale is made - - You're done! The difference between the net rates and our regular rates is yours to keep.  Travel Agents mostly conduct their business this way.  Example:  You charge your client $63 for the tour, but you only pay $48 from us.
+          <br><br> 
+          <b>c)</b> Credit Card Processing Reseller – You’re using your own credit card processing and selling our tours yourself.  Then you’re sending us a confirmation email for each tour you sell.  On a monthly basis we will send you an invoice for you to pay.  The invoice is for the entire net rate, the commission difference is yours to keep.<br><br> 
+
+       </div> 
+       <b>3)</b> We will review the application, approve it and send you an email with your booking links.  These links can be used for internal use or you can use them on your websites.
+    </div> 
+    <br><br> 
+
+    <b>How you get paid on sales made:</b> 
+
+    <p>Very simple!  Credit Card Processing Resellers login and check their reseller reports and send them to us for monthly payment.  And Mark-up Resellers will just sell the tours at a higher price (through their own credit card processing methods).</p> 
+    
+    <h3 id="submit_request">Please submit the following form:</h3> 
+
+    {% if success %}
+        <p style="color: green">
+            Thank you for you request {{ reseller_request.first_name }}.  We will be contacting you shortly.
+        </p>
+    {% else %}
+        <form action="#submit_request" method="POST">
+            <table id="request">
+                {{ form.as_table }}
+                <tr>
+                    <th></th>
+                    <td><input type="submit" value="Send" style="width: 75px" /></td>
+                </tr>
+            </table>
+        </form>
+    {% endif %}
+
+
+</div>    
+{% endblock content %}

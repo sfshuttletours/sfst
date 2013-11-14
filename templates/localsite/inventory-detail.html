@@ -1,0 +1,71 @@
+{% extends "admin/base_site.html" %}
+{% load satchmo_currency %}
+{% load ctags %}
+
+{% block title %}Tours on {{ day|date:"M d, Y" }}{% endblock title %}
+
+{% block links %}{% endblock links %}
+
+{% block content %}
+    <h1>Tours on {{ day|date:"l" }}, {{ day|date:"M d, Y" }}</h1>
+    <a href="{% url inventory_detail %}?date={{ yesterday|date:"m/d/Y" }}">previous date</a> | 
+    <a href="{% url inventory_detail %}?date={{ tomorrow|date:"m/d/Y" }}">next date</a> 
+    
+    <div class="print"><a href="javascript:window.print()">Print this page</a></div>
+    
+	
+    <form action="#" method="POST" class="concierge_note_form">
+        {{ global_email_form.is_global_email }}
+        {{ global_email_form.subject }}{{ global_email_form.subject.errors }}<br/>
+        {{ global_email_form.message }}{{ global_email_form.message.errors }}
+        <br/>
+        <input type="submit" value="Send Email to All">
+    </form>
+    {% for tour_product in tour_products %}
+    <div id="inventory_dates">
+        <h2>
+            <a href="{% url inventory_detail %}?product={{ tour_product.product.id }}">{{ tour_product.tour_type.name }} - {{ tour_product.pretty_time }}{% if not tour_product.schedule.active %} (!){% endif %}</a> &rarr; <a href="{% url inventory_detail %}?product={{ tour_product.product.id }}&checkin=1">CHECKIN</a>
+            <div id="booked_total">Booked / Total: {{ tour_product.product.total_sold|floatformat }} / {{ tour_product.product.items_in_stock|floatformat }}</div>
+        </h2>
+        
+        {% with tour_product.passengers as passengers %}
+            {% if passengers %}
+                <table class="inventory-details">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Name</th>
+                        <th class="order_notes">Notes</th>
+                        <th>Cell</th>
+                        <th>Seats</th>
+                    </tr>
+                    {% for contact in passengers %}
+                        {% if contact.order.status == 'New' %}
+                            <tr class="{% cycle 'even' 'odd' %} {% if contact.is_checked_in %}checked_in{% endif %}" id="checkin_row_{{ contact.order.id }}-{{ tour_product.product.id }}">
+                                <td><a href="{% url order_detail contact.order.id %}">{{ contact.order.id }}</a></td>
+                                <td class="passenger_name"><a href="{% url admin:contact_contact_change contact.id %}" style="text-decoration: none;">{% if contact.last_name %}{{ contact.last_name }}, {% endif %}{{ contact.first_name }}</a></td>
+                                <td class="order_notes">
+                                    {{ contact.order.notes|default:'' }}
+                                    {% if contact.order.AFFILIATE %}
+                                        {% if not contact.order.notes %}VIA: {{ contact.order.AFFILIATE.handle }}{% endif %}
+                                    {% endif %}
+                                </td>
+                                <td>{{ contact.cell }}</td>
+                                <td>
+                                    {% comment %}Not show pending order items or items not from this orderat all ?{% endcomment %}
+                                    
+                                    {% for item in contact.items %}
+                                        {{ item.quantity|floatformat }} {{ item.product.productvariation.optionkey }}{{ item.quantity|pluralize }}
+                                        {% if item.STATUS %}<a href="{% url order_detail item.order.id %}"><span class="red">{{ item.STATUS }}</span></a>{% endif %}<br />
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>No seats sold yet.</p>
+            {% endif %}
+        {% endwith %}
+    </div>
+    {% endfor %}
+{% endblock content %}

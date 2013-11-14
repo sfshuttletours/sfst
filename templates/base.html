@@ -1,0 +1,33 @@
+{% load i18n satchmo_category satchmo_google satchmo_util satchmo_currency satchmo_discounts app_plugins normalize_decimal ctags %}
+
+{% block doctype %}<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+{% endblock %}
+
+<head>
+    {% if site_skin.favicon %}
+    <link rel="shortcut icon" type="image/x-icon" href="{{ site_skin.favicon.url }}" />
+    {% else %}
+    <link rel="shortcut icon" type="image/x-icon" href="{% media_url 'img/favicon.ico' %}" />
+    {% endif %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+    {% block extra-head %}{% endblock %}
+
+    <link rel="stylesheet" href="{% media_url 'css/blitzer/jquery-ui-1.8.1.custom.css' %}" />
+    <link rel="stylesheet" href="{% media_url 'css/style.css' %}" />
+
+    {% block stylesheet %}{% endblock %}
+
+    <title>{% block title %}{% endblock %} | {{ site_skin.name }}</title>
+    {% plugin_point "page_head" %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}" id="{% block body_id %}{% endblock %}">
+    {% block body %}
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends "concierges/base.html" %}
+
+{% block title %}Check Inventory | {{ concierge.name }}{% endblock title %}
+
+{% block concierge-content %}
+    <style>
+        #concierge-header { display: none; }
+        #id_quick_check table tr th { text-align: center; }
+        #id_quick_check table tr td { font-size: 15px; min-width: 80px; padding: 5px 20px; }
+        #id_quick_check table tr.odd { background: #EEEEEE; }
+    </style>
+    
+    <h1>Tour Inventory Quick Checker</h1>
+    {% for i in inventory %}
+        <div style="float:left; width: 45%" id="id_quick_check">
+            <h2>{% cycle 'Today' 'Tomorrow' %} -- {{ i.day|date:"F d, Y"}}</h2>
+            <table>
+                <tr>
+                    <th>Tour Type</th>
+                    <th>Time</th>
+                    <th>Seats Available</th>
+                </tr>
+                {% for info in i.times %}
+                    <tr class="{% cycle 'even' 'odd' %}">
+                        <td class="tour_name"><a href="{{ info.tour_type.get_absolute_url }}?CODE={{ concierge.code }}">{{ info.tour_type.name }}</a></td>
+                        <td>{{ info.time }}</td>
+                        <td>{{ info.seats_available|floatformat }}</td>
+                    </tr>
+                {% endfor %}            
+            </table>        
+        </div>
+    {% endfor %}
+{% endblock concierge-content %}

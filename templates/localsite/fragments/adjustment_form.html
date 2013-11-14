@@ -1,0 +1,60 @@
+<div id="adjust_form">
+    {% for field in form.hidden_fields %}
+    {{ field }}
+    {% endfor %}
+    <div class='fl'>{{ form.non_field_errors }}</div>
+    <br />
+    {% for field in form.visible_fields %}
+    <div>
+        <span class='fl'>{{ field.errors }}</span>
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    <br />
+    {% endfor %}
+</div>
+<br />
+{% if payment_form %}
+<div id="payment_form"{% if not form.is_valid %} class="hide"{% endif %}>
+    <h2>Please enter your credit card and billing information below.  On successful submission your credit card will be charged $15 per person per item changed.</h2>
+    {{ payment_form.non_field_errors }}
+    {% for field in payment_form.visible_fields %}
+    <div>
+        <span class='fl'>{{ field.errors }}</span>
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    <br />
+    {% endfor %}
+</div>
+{% endif %}
+
+<input type="submit" id="submit" value="{% if action_type == 'refund' %}Refund and Cancel Booking{% else %}{% if available %}Move Tour{% else %}Check for Availability{% endif %}{% endif %}" />
+
+<script type="text/javascript" charset="utf-8">
+    {% if available %}
+        $('#adjustment_form').attr('rel', 'move_form');
+        $('#adjustment_form').attr('action', '{% url customer_adjust_item order_item.id "move" %}');
+    {% endif %}
+    var now = new Date();
+    $('input[name=day]').datepicker({
+        minDate: now,
+        showButtonPanel: true,
+        onSelect: on_date_select
+    }).datepicker("setDate", $('#id_day').val());
+
+
+    function on_date_select(dateText, instance) {
+        // instance is passed in but not used here! This is to conform with the datepicker function/listener interface required.
+        $('input[name=day]').val(dateText);
+        $.getJSON('{% url ajax_get_schedule_adjust tour_type.id %}', {'selected_date': dateText}, function(data){
+            var $schedules = $('#id_tour_schedule');
+            $schedules.empty();
+            var html = '';
+            $.each(data.schedules, function(idx, schedule){
+                html += "<option value='"+ schedule.id + "'>" + schedule.time + "</option>";
+            });
+            $schedules.html(html);
+        });
+    }
+</script>

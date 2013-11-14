@@ -1,0 +1,21 @@
+{% load custom_tags %}
+{% load ctags %}
+
+Send an email message to <b>{{ order.contact.email }}</b>
+<br/><br/>
+
+<form id="id_email_customer_form" action="{% url order_email_customer order.id %}" method="POST">
+    {% render_form_field form.email_subject %}
+    {% render_form_field form.email_body %}
+    <br/>
+    <input type="submit" value="Send Message" class="fr" />
+    <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+</form>
+
+<script type="text/javascript">
+    $(function() {
+        (new FormHelper('id_email_customer_form')).bind_for_ajax(function(data) {
+            $.fancybox.close();
+        })
+    });
+</script>

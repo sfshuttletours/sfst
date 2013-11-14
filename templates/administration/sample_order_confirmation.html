@@ -1,0 +1,26 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}Sample order confirmation{% endblock title %}
+
+{% block content %}
+    <div id="admin_links" style="float: left;">
+        <a href="/admin/localsite/orderconfirmationsection/">Manage sections</a> | 
+        <a href="/admin/localsite/orderconfirmationbannertext/">Manage banner / top & large text</a> | 
+        <a href="/admin/localsite/orderconfirmationcoupon/">Manage coupons</a>
+    </div>
+    
+    <div id="force_skins" style="float: right;">
+        <b>Force Site Skin:</b>
+        <ul>
+            {% for skin in all_skins %}
+                <li>
+                    <a href="{% url sample_order_confirmation %}?force={{ skin.code }}">{{ skin.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="cl"></div>
+    
+    {% include "shop/pretty_confirmation.html" %}
+{% endblock %}

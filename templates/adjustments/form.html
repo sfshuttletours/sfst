@@ -1,0 +1,17 @@
+<h3>{{ action_type|title }} Items Selected Above</h3>
+
+<table>
+    <tr>
+        <th>User making the change:</th>
+        <td>{{ request.user.username }}</td>
+    </tr>
+    {{ form.extra_row|safe }}
+    {{ form }}
+    <tr>
+        <th></th>
+        <td style="text-align:right">
+            <input type="button" value="Cancel" onclick="$('div#panel').empty(); $('.adjust').hide();" />
+            <input type="submit" value="{{ action_type|title }}" />        
+        </td>
+    </tr>
+</table>

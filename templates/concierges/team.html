@@ -1,0 +1,24 @@
+{% extends "concierges/base.html" %}
+{% load thumbnail %}
+
+{% block title %}Meet Our Team | {{ concierge.name }}{% endblock title %}
+
+{% block concierge-content %}
+    <style type="text/css" media="screen">
+        div.team_member {
+            float: left;
+            width: 30%;
+            text-align: center;
+        }
+    </style>
+    <h1>Meet our CSR Team</h1>
+    {% for team_member in team_members %}
+        <div class="team_member">
+            {% thumbnail team_member.image "150x150" as image %}
+                <img src="{{ image.url }}" alt="{{ team_member.name }}" /><br />
+            {% endthumbnail %}
+            <strong>{{ team_member.name }}</strong><br />
+            <strong>{{ team_member.job_title }}</strong>
+        </div>
+    {% endfor %}
+{% endblock concierge-content %}

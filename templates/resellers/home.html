@@ -1,0 +1,37 @@
+{% extends "admin/base_site.html" %}
+{% load satchmo_currency %}
+
+{% block content %}
+    <h1>Welcome {{ reseller.name }}!</h1>
+    <h3>Your Profile</h3>
+    <table>
+        <tr>
+            <th>Your Code:</th>
+            <td>{{ reseller.code }}</td>
+        </tr>
+        {% if reseller.discount %}
+            <tr>
+                <th>Your Discount:</th>
+                <td>{{ reseller.discount }}</td>
+            </tr>        
+        {% else %}
+            <tr>
+                <th>Your Commission:</th>
+                <td>{{ reseller.commission|currency }}</td>
+            </tr>        
+        {% endif %}
+        <tr>
+            <th>URLs:</th>
+            <td>
+                <table>
+                    {% for tt in tour_types %}
+                        <tr>
+                            <td><a href="{{ tt.get_absolute_url }}?CODE={{ reseller.code }}">{{ tt.name }}</a></td>
+                            <td>http://{{ site.domain }}{{ tt.get_absolute_url }}?CODE={{ reseller.code }}&skin={{ tt.default_site_skin.code }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    </table>
+{% endblock content %}

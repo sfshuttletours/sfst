@@ -1,0 +1,175 @@
+[
+    {
+        "pk": 1, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "09:00:00", 
+            "tour_type": 1, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5, 
+                6, 
+                7
+            ]
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "11:15:00", 
+            "tour_type": 1, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5
+            ]
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "11:45:00", 
+            "tour_type": 1, 
+            "day_of_week": [
+                6, 
+                7
+            ]
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "08:30:00", 
+            "tour_type": 2, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5
+            ]
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "08:15:00", 
+            "tour_type": 2, 
+            "day_of_week": [
+                6, 
+                7
+            ]
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "08:30:00", 
+            "tour_type": 3, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5, 
+                6, 
+                7
+            ]
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "09:00:00", 
+            "tour_type": 4, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5, 
+                6, 
+                7
+            ]
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "13:00:00", 
+            "tour_type": 5, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5, 
+                6, 
+                7
+            ]
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "08:30:00", 
+            "tour_type": 10, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5, 
+                6, 
+                7
+            ]
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "13:00:00", 
+            "tour_type": 11, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5, 
+                6, 
+                7
+            ]
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "localsite.tourschedule", 
+        "fields": {
+            "tour_time": "09:00:00", 
+            "tour_type": 12, 
+            "day_of_week": [
+                1, 
+                2, 
+                3, 
+                4, 
+                5, 
+                6, 
+                7
+            ]
+        }
+    }
+]

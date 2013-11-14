@@ -1,0 +1,52 @@
+<table>
+    <tr>
+        <th>Tour Name</th>
+        <th>Tour Date</th>
+        <th>Tour Time</th>
+        <th>Total Sold Count</th>
+        <th>Recounted Total Sold</th>
+        <th>Seats Filled</th>
+        <th>Recounted Seats Filled</th>
+        <th>Old Inventory Page</th>
+    </tr>
+    {% for info in debug_info %}
+        <tr>
+            <td><a target="_blank" href="/administration/inventory/detail/?product={{ info.tour_product.product.id }}">{{ info.tour_product.tour_type.name }}</a></td>
+            <td>{{ info.tour_product.day|date:"m/d/Y" }}</td>
+            <td>{{ info.tour_product.pretty_time }}</td>
+            <td>{{ info.total_sold }}</td>
+            <td>{{ info.sold|floatformat }}</td>
+            <td>{{ info.seats_filled }}</td>
+            <td>{{ info.seats }}</td>
+            <td><a target="_blank" href="http://securebookingshuttletours.com/inventory/?date={{ info.tour_day.date }}&product={{ info.tour_day.product_id }}&time={{ info.tour_day.time }}">see old inventory page</a></td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <h4>New Items</h4>
+                <table>
+                    {% for item in info.tour_product.items %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.order.contact.full_name }}</td>
+                            <td>{{ item.quantity }}</td>
+                        </tr>                    
+                    {% endfor %}                    
+                </table>
+            </td>
+            <td colspan="4">
+                <h4>Old Items</h4>
+                <table>
+                    {% for item in info.old_items %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.product_id }}</td>
+                            <td>{{ item.order.contact.first_name }} {{ item.order.contact.last_name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.order.notes }}</td>
+                        </tr>                    
+                    {% endfor %}                    
+                </table>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

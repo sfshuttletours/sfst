@@ -1,0 +1,59 @@
+{% extends "shop/base.html" %}
+{% load normalize_decimal %}
+{% load satchmo_currency ctags %}
+
+{% block body_class %}user_adjustments{% endblock %}
+
+{% block content %}
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            {% if order_item.adjustment %}
+            <th>Status</th>
+            {% endif %}
+        <tr>
+            <td>{{ order_item.product }}</td>
+            <td>{{ order_item.quantity|normalize_decimal }}</td>
+            <td>{{ order_item.line_total|currency }}</td>
+            {% if order_item.adjustment %}
+            <td>{{ order_item.adjustment.get_status_display|title }}</td>
+            {% endif %}
+        </tr>
+    </table>
+
+    {% if action_type == 'refund' %}
+        You can request a refund for the above tour. Only 70% of the paid amount will be refunded to your credit card. Refunds may take 4-5 days to process.
+    {% else %}
+        You can re-schedule this tour for another date. A $15 change fee per person/ticket will be charged to your Credit Card.
+    {% endif %}
+
+    <form id="adjustment_form" rel="{% if action_type == 'refund' %}id_refund_form{% else %}id_change_form{% endif %}" action="{% url customer_adjust_item order_item.id action_type %}" method="post">
+        {% include "localsite/fragments/adjustment_form.html" %}
+    </form>
+
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+            $('#adjustment_form').submit(function(e) {
+                var self = $(this);
+                if ($(this).attr('rel').indexOf('refund') > -1){
+                    return confirm('Are you sure you want to receive a 70% refund and cancel your tour?');
+                }
+                else if ($(this).attr('rel').indexOf('change') > -1){
+                    e.preventDefault();
+                    $.post('{% url check_move_availability order_item.id %}', $(this).serialize(),
+                        function(res) {
+                            self.html(res);
+                        }
+                    );
+                }
+                else if ($(this).attr('rel').indexOf('move') > -1 ){
+                    return confirm('Are you sure you want to reschedule your tour for a charge of $15 per tour?');
+                }
+                else{}
+            });
+        });
+    </script>
+
+{% endblock %}

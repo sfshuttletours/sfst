@@ -1,0 +1,33 @@
+## The following requirements were added by pip --freeze:
+Fabric==0.9.1
+django-debug-toolbar==0.8.3
+Django==1.2.3
+django-pagination==1.0.7
+-e hg+http://bitbucket.org/chris1610/satchmo/@86134417a87b#egg=Satchmo
+wsgiref==0.1.2
+mysql-python==1.2.3c1
+South==0.7.2
+django-extensions==0.5
+nose==0.11.3
+python-memcached==1.45
+pygooglechart==0.3.0
+
+sorl-thumbnail==11.12
+django-sentry==1.13.5
+
+#
+#Satchmo requirements
+#
+PIL
+pycrypto==2.0.1
+http://www.satchmoproject.com/snapshots/trml2pdf-1.2.tar.gz
+PyYAML==3.09
+# http://www.reportlab.org/ftp/ReportLab_2_3.tar.gz
+-e hg+http://bitbucket.org/bkroeze/django-threaded-multihost/@804376b#egg=django_threaded_multihost
+-e hg+http://bitbucket.org/bkroeze/django-caching-app-plugins/@dd9c1dc#egg=django_caching_app_plugins
+-e hg+http://bitbucket.org/bkroeze/django-signals-ahoy/@4025183#egg=django_signals_ahoy
+-e hg+http://bitbucket.org/bkroeze/django-keyedcache/@4be1823#egg=django_keyedcache
+-e hg+http://bitbucket.org/bkroeze/django-livesettings/@9467c4b#egg=django_livesettings
+-e hg+http://bitbucket.org/ubernostrum/django-registration@d36a382#egg=django_registration
+-e git+https://github.com/twilio/twilio-python@a6f6c40#egg=twilio-python
+-e git+git@github.com:Tivix/django-common.git@d768ea1#egg=django_common

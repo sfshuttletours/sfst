@@ -1,0 +1,19 @@
+John,
+
+Following order items were not checked in or did check-in partially for the tour product: {{ tour_product }}. These order items owed $'s.
+
+The person who finalized the tour was: {{ user }}.
+
+{% for item in suspicious_items %}
+    {{ item.order }}
+    Order item: {{ item }}
+    Was it checked-in: {{ item.is_checked_in }}
+    Amount owed on order: ${{ item.order.balance }}
+    Amount collected: ${% if item.is_checked_in %}{{ item.checkin.order_checkin.amount_taken_sales }}{% else %}0{% endif %}
+    Checked-in / Expected: {% if item.is_checked_in %}{{ item.checkin.num_checkedin }}{% else %}0{% endif %} / {{ item.quantity|floatformat }}
+    Concierge: {{ item.concierge }}
+    
+    
+{% endfor %}
+
+Thanks.

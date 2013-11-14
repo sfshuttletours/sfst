@@ -1,0 +1,80 @@
+{% extends "shop/base.html" %}
+{% load i18n %}
+{% load satchmo_currency ctags %}
+{% load satchmo_order %}
+
+
+{% block content %}
+<div id="payment">
+    {% block error_processing %}
+    {% if errors %}
+        <h3>{% block errorheader %}{% trans "The following error was returned while trying to process your payment. Please correct and resubmit." %}{% endblock %}</h3>
+        <p style="color: red">
+            {{ errors }}
+        </p>
+    {% else %}
+        <h3>{% trans "Please validate the following information, then submit your order." %}</h3>
+    {% endif %}
+    {% endblock %}
+    {% block order_details %}
+        {% with order.orderitem_set.all as cart %}
+            {% include "shop/cart_table.html" %}
+        {% endwith %}
+        <a href="{% url satchmo_cart %}" class="fr">Edit Cart</a>
+        
+        <div class="small_block">
+            <h4>{% trans "Contact Information" %}</h4>
+            {{ order.contact.full_name }}<br/>
+            {{ order.contact.email }}<br/>
+            {{ order.contact.primary_phone.phone }}<br/>
+            <a href="{% url satchmo_checkout-step1 %}">Edit Contact Information</a>
+        </div>
+        
+        <div class="small_block">
+            <h4>{% trans "Billing Information" %}</h4>
+            {{ order.full_bill_street|linebreaksbr }}<br/>
+            {{ order.bill_city }}<br/>
+            {{ order.bill_state }}<br/>
+            {{ order.bill_postal_code }}<br/>
+            {{ order.bill_country }}<br/>
+             <a href="{% url satchmo_checkout-step1 %}">Edit Billing Information</a><br />
+         </div>
+         
+        <!-- <h4>{% trans "Total" %}</h4>
+        Total = {{order.total|currency}}<br/> -->
+
+    {% endblock %}
+    
+    <div class="small_block">
+    {% block payment_display %}
+    
+    {% endblock %}
+    <br /><a href="{{ checkout_step2 }}">Edit Payment Information</a>
+    </div>
+    
+    <div class="cl"></div>
+    
+    <div class="fr">
+        {% block payment_form %}
+        {# override with any payment-module specific needs #}
+        <p>&nbsp;</p>
+        <form method="post" action=".">
+            <input type="hidden" name="Process" value="True">
+            <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+            <input type="submit" value="{% trans "Confirm and Order" %}"/>
+        </form>
+    </div>
+    
+    <div class="cl"></div>
+    {% endblock %}
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('form').submit(function() {
+            $('form input[type=submit]').attr('disabled', true);
+            $('form img').show();
+        });
+    });
+</script>
+{% endblock content %}

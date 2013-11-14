@@ -1,0 +1,67 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}Manage Resellers{% endblock title %}
+
+
+{% block content %}
+    {% if user.is_superuser %}
+        <h2>Pending Request</h2>
+        <ul>        
+            {% for r in pending %}
+                <li><a href="{% url pending_reseller_request r.id %}">{{ r }}</a></li>
+            {% empty %}
+                <li>There are no pending requests.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <h2>Current Resellers</h2>
+    <p>
+        <strong>KEY:</strong>
+        {% for cat in reseller_categories %}
+            <span class="key" style="background-color: {{ cat.color }};">{{ cat.name }}</span>
+        {% endfor %}
+    </p>
+    <h2>Filter: <input type="text" id="filter" /> </h2>
+    <div id="resellers">
+        {% for reseller in resellers %}
+            <div class="reseller {% cycle one two three four %}" style="background-color: {{ reseller.category.color }}">
+                <h3>{{ reseller.company_name }}</h3>
+                <p>
+                    <a href="{% url reseller_report reseller.id %}">Run Report</a> |
+                    <a href="{% url home %}?CODE={{ reseller.code }}">Book</a> | 
+                    <a href="{% url become_user reseller.contact.user.id %}">Login As</a><br />
+                    Discount: {{ reseller.discount }}, Commission: {{ reseller.commission }}<br />
+                    Code: {{ reseller.code }} <br />
+                    Edit:
+                    <a href="{% url admin:resellers_reseller_change reseller.id %}">Reseller</a> |
+                    <a href="{% url admin:contact_contact_change reseller.contact.id %}">Contact</a> |
+                    <a href="{% url admin:auth_user_change reseller.contact.user.id %}">User</a> |
+                    <a href="{% url admin:auth_user_change reseller.contact.user.id %}password/">Password</a><br />
+                    Orders Last Month: <strong>{{ reseller.total_orders_last_month }}</strong><br />
+                    Orders This Month: <strong>{{ reseller.total_orders_this_month }}</strong><br />
+                    Reseller Type: {{ reseller.get_reseller_type_display }}
+                    
+                </p>
+            </div>
+        {% endfor %}        
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+        $('#filter').focus();
+        $.expr[':'].icontains = function(obj, index, meta, stack){
+            return (obj.textContent || obj.innerText || jQuery(obj).text() || '').toLowerCase().indexOf(meta[3].toLowerCase()) >= 0;
+        };
+
+        $('#filter').keyup(function(e) {
+           var val = $('#filter').val();
+           if (val.length > 0) {
+               $('.reseller:visible').hide();
+               $('div.reseller h3:icontains("' + val + '")').parent().show();
+           } else {
+               $('.reseller').show();
+           }
+        });
+    </script>
+    
+{% endblock content %}

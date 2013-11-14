@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load i18n satchmo_category satchmo_google satchmo_util satchmo_currency satchmo_discounts app_plugins normalize_decimal ctags %}
+
+{% block extra-head %}
+    <script src="{% media_url 'js/jquery-ui-1.8.1.custom.min.js' %}"></script>
+{% endblock %}
+
+{% block stylesheet %}
+    {% if site_skin.custom_css %}
+        <style type="text/css">
+            {{ site_skin.custom_css }}
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% block title %}{{ pagetitle }}{% endblock %}
+
+{% block body_id %}{% if bodyid %}{{ bodyid }}{% endif %}{% endblock %}
+
+{% block body_class %}{% if bodyclass %}{{ bodyclass }}{% endif %} {% if is_mobile %}mobile{% else %}desktop{% endif %}{% endblock %}
+
+{% block body %}
+    {% plugin_point "page_top" %}
+    <div id="container">
+	    <div id="top">
+	        <a href="{{ site_skin.header_banner_link }}">
+	        	<img src="{{ site_skin.header_banner_image.url }}?v={{ site_skin.hash }}" />
+			</a>
+	    </div>
+        {% ifnotequal request.path '/' %}
+	    <div id="navbar">
+    	    <ul>
+    	        <li><a href="
+
+    	        {% if user.is_authenticated and affiliate %}
+    	            {% if perms.resellers.is_reseller %}
+    	                {% url resellers_home %}
+    	            {% else %}
+    	                {% url concierges_home %}
+    	            {% endif %}
+    	        {% else %}
+    	            {% if user.is_authenticated and user.is_staff %}
+    	                {% url administration_home %}
+    	            {% else %}
+    	                {% url satchmo_shop_home %}
+    	            {% endif %}
+    	        {% endif %}
+
+    	        ">Home - Add tours here</a></li>
+
+    	        <li><a href="{% url satchmo_cart %}">Cart</a></li>
+    	        {% if user.is_authenticated %}
+    	            <li><a href="{{ logout_url }}">Logout</a></li>
+    	        {% else %}
+        	        <li><a href="{{ login_url }}">Login</a></li>
+    	        {% endif %}
+    	    	{% block navbar %}{% endblock %}
+                {% if user.is_authenticated and affiliate %}
+                    <li class="booking_as">
+                        <span>
+                            VIA: {{ affiliate }}
+                            {% if request.session.old_user_id %}
+                                (<a href="#" onclick="$.get('{% url clear_affiliate %}', function(){$('li.booking_as').remove()}); return false;" style="text-decoration: underline;">Logout</a>)
+                            {% endif %}
+                        </span>
+                    </li>
+                {% endif %}
+
+    	   	</ul>
+        </div>
+        {% endifnotequal %}
+
+
+	    <div id="content">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="messages{% if message.tags %} {{ message.tags }}{% endif %}">
+                        {% if message.tags %}
+                            {% if 'warning' in message.tags %}
+                                    <img src="{% media_url 'img/error.png' %}" />
+                            {% endif %}
+                        {% endif %}
+                        <ul>
+                            <li>{{ message }}</li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% endif %}
+    	    {% block content %}{% endblock %}
+    	</div>
+
+    	<div id="footer">
+    		{% block footer %}
+    		  <div class="fr">
+    		    Having trouble? Call Toll Free:  1-866-991-TOUR (8687)
+    		    {% if site_skin.is_concierge_cta %}
+    		        <a href="{% url creg %}" title="Concierge Registration">Concierge Registration</a> |
+    		    {% endif %}
+    		    <a href="{% url auth_login %}" title="Reseller Login">
+    		        {% if site_skin.is_concierge_cta %}Concierge / {% endif %}Reseller Login
+    		    </a> |
+    		    <a href="{% url resellers_main %}" title="I want to be a Reseller">Reseller Registration</a>
+    		  </div>
+    		  <div class="cl"></div>
+    		{% endblock %}
+    	</div>
+
+    </div>
+
+	{% block page-close %}
+	    <script type="text/javascript">
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+          try {
+            var pageTracker = _gat._getTracker("UA-219130-1");
+            pageTracker._trackPageview();
+          } catch(err) {}
+        </script>
+	{% endblock %}
+
+    <!-- <div id="click_to_call">
+        Having trouble? Click here to call us!
+    </div> -->
+
+{% endblock %}

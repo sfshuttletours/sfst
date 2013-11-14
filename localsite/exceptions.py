@@ -1,0 +1,2 @@
+class ComboScheduleNotBookable(Exception):
+    pass

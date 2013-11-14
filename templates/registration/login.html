@@ -1,0 +1,62 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<style type="text/css" media="screen">
+    #login-box {margin: 100px auto; width: 450px; border: 1px solid #888; padding: 20px}
+    td {border: none;}
+</style>
+
+<div id="login-box">
+    <h1>Please Login</h1>
+    {% if form.non_field_errors %}
+        <p class="error">{% for err in form.non_field_errors %}{{ err }}{% if not forloop.last %}<br/>{% endif %}{% endfor %}</p>
+    {% endif %}
+
+    <form method="post" action=".">
+        <table>
+            <tr>
+                <td><label for="id_username">Username:</label></td>
+                <td>{{ form.username }}</td>
+            </tr>
+            {% if form.username.errors %}
+                <tr>
+                    <td class="error" colspan="2">***{{ form.username.errors|join:", " }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td><label for="id_password">{% trans 'Password' %}:</label></td>
+                <td>{{ form.password }}</td>
+            </tr>
+            {% if form.password.errors %}
+                <tr>
+                    <td class="error" colspan="2">***{{ form.password.errors|join:", " }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td></td>
+                <td><input type="submit" value="{% trans 'Login' %}" />
+                <input type="hidden" name="next"
+                {% if next %}
+                    value={{ next }} />
+                {% else %}
+                    value="{% url login_dispatcher %}" />
+                {% endif %}
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    {# <p>{% trans "If you do not have an account, please" %} <a href="{% url registration_register %}">{% trans "click here" %}</a>.</p> #}
+    <p>{% trans "If you do not remember your password, please" %} <a href="{% url auth_password_reset %}">{% trans "click here</a> to have it reset." %}</p>    
+</div>
+    
+    <script type="text/javascript">
+        $(function() {
+            $('#id_username').select();
+        })
+    </script>
+{% endblock %}

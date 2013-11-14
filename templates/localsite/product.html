@@ -1,0 +1,168 @@
+{% extends "shop/base.html" %}
+{% load ctags %}
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+<div id="order">
+    {% comment %}
+        {% if out_of_stock %}
+            <div class="error">That many seats are not availible for "{{ tour_type.name }}" at the chosen time. Please try another date/time, or <a href="http://www.sanfranshuttletours.com/stand_by_request.html" target="_new">click here</a> for the stand-by list.</div>
+        {% endif %}
+    {% endcomment %}
+
+    <form action="{% url product tour_type.slug %}{% if is_mobile %}?mobile=1{% endif %}" method="POST">
+        <h1>{{ tour_type.name }}</h1>
+
+        <p>
+            {{ tour_type.description|safe }}
+        </p>
+
+        {{ form.non_field_errors }}
+
+        <div id="calendar">
+            <h2>Step 1 - {% if site_skin.tour_page_step1_text %}{{ site_skin.tour_page_step1_text }}{% else %}Choose Tour Date{% endif %}</h2>
+            {{ form.tour_date.errors }}
+
+            {% if not is_mobile %}
+                <div id="widget"></div>
+            {% endif %}
+        </div>
+
+        {% if is_mobile %}
+            <div id="mobile_date_selector">
+                {{ form.month }}
+                {{ form.day_of_month }}
+                {{ form.year }}
+            </div>
+            <br/><br/>
+        {% else %}
+            {{ form.tour_date }}
+        {% endif %}
+
+        <script type="text/javascript">
+            function on_date_select(dateText, instance) {
+                // instance is passed in but not used here! This is to conform with the datepicker function/listener interface required.
+                $('input#id_tour_date').val(dateText);
+                $.getJSON('{% url ajax_get_schedule tour_type.id %}', {'selected_date': dateText}, function(data){
+                    var $schedules = $('div#schedules');
+                    $schedules.empty();
+                    var html = '';
+                    $.each(data.schedules, function(idx, schedule){
+                        html += '<label><input type="radio" name="schedule" value="' + schedule.id +'" ';
+                        if (data.schedules.length == 1) {
+                            html += 'checked="1" ';
+                        }
+                        html += '/>';
+                        html += schedule.time + '</label>';
+                    });
+                    $schedules.html(html);
+                    $('div#step_3').show();
+                    $('div#continue').show();
+                    $('.ui-datepicker-today .ui-state-default.ui-state-highlight').css('color', '#000000');
+                    $('.ui-datepicker-today .ui-state-default.ui-state-highlight.ui-state-active').css('color', '#CC0000');
+                    $.each(data.prices, function(index, item){
+                        $('label#price-label-'+item.id).html(item.label + ': ' + item.price);
+                    });
+                });
+            }
+
+        	$(function() {
+        	    {% if not is_mobile %}
+            		$('#calendar > #widget').datepicker({
+            			numberOfMonths: {% if is_mobile %}1{% else %}3{% endif %},
+            			showButtonPanel: true,
+            			onSelect: on_date_select,
+            			minDate: {% if calendar_min_date %}{{ calendar_min_date }}{% else %}0{% endif %},
+            			maxDate: +{% if calendar_max_date %}{{ calendar_max_date }}{% else %}{% if calendar_max_date == 0 %}0{% else %}365{% endif %}{% endif %}
+            		}).datepicker("setDate", $('#id_tour_date').val());
+        		{% else %}
+                    $('#mobile_date_selector > select').change(function() {
+                        date_string = $('#mobile_date_selector > #id_month').val() + "/" +
+                            $('#mobile_date_selector > #id_day_of_month').val() + "/" +
+                            $('#mobile_date_selector > #id_year').val();
+                       on_date_select(date_string, undefined);
+                    });
+                {% endif %}
+        	});
+    	</script>
+
+    	<div id="step_2">
+            <h2>Step 2 - Select Quantity</h2>
+            {{ form.ticket_types_specified.errors }}
+            <div id="quantity">
+                {% for opt in form.option_fields %}
+					<div class="quantity">
+	                    <label id="price-label-{{ opt.id }}">{{ opt.label }}: {{ opt.price }}</label>
+	                    {{ opt.html|safe }}
+	                    <div class="cl"></div>
+					</div>
+                {% endfor %}
+            </div>
+    	</div>
+
+
+        <div class="cl"></div>
+
+        {% if tour_type.requires_names %}
+	        <div id="names-container" style="display: none; margin-top: 10px; text-align: center;">
+				<h3>{{ tour_type.customer_names_page_headline|default:"This Tour requires Passenger Names" }}</h3>
+				<small>{{ tour_type.customer_names_page_explanation }}</small>
+	            <div id="names" style="width: 100%; text-align: center;"></div>
+	        </div>
+
+	        <div class="cl"></div>
+		{% endif %}
+
+        <div id="step_3">
+            <h2>Step 3 - Departure Time</h2>
+            {{ form.schedule.errors }}
+            <div id="schedules">
+                {{ form.schedule }}
+            </div>
+        </div>
+
+        <br/>
+
+        <div id="continue">
+            <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+            <input type="submit" name="book_it" value="Book It!" class="" />
+        </div>
+
+        <div class="cl"></div>
+
+        <br/><br/>
+        {{ form.non_field_errors }}
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+		$('.quantity select').change(function() {
+			$("#names-container").show();
+
+			$('#names').html("");
+
+			$('.quantity select').each(function(index) {
+                total = Number($(this).val());
+				if (total)
+					$('#names').append("<h4>" + $(this).attr("rel") + "</h4>");
+
+                for (var i=0; i<total; i++) {
+                    $('#names').append("<input type='text' name='" + $(this).attr("rel") + "-names' class='names quantity_ticket_type-" + index + "' />");
+                }
+			});
+		});
+		{% if request.method == "POST" %}
+			$('.quantity select').change();
+			{% for name in names %}
+				$('#names :input:eq({{ forloop.counter0 }})').val("{{ name }}");
+			{% endfor %}
+		{% endif %}
+        $('form').submit(function() {
+            $('form input[type=submit]').attr('disabled', true);
+            $('form img').show();
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,5 @@
+REFUND_STATUS = (
+    (1, 'NOT_CHANGEABLE'),
+    (2, 'VOIDABLE'),
+    (3, 'REFUND_OR_RESCHEDULE'),
+)

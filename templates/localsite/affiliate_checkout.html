@@ -1,0 +1,72 @@
+{% extends "shop/base.html" %}
+{% load i18n %}
+{% load satchmo_currency ctags %}
+
+{% block extra-head %}
+{% include "contact/_contact_info_form.html" %}
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+    
+    {% if order %}
+        <h3>Receipt for Order #{% if user.is_staff %}<a href="{% url order_detail order.id %}">{{ order.id }}</a>{% else %}{{ order.id }}{% endif %}</h3>
+        <br/>
+        
+        {% if deposit_total %}
+            <b>Total Deposit Required</b>: {{ deposit_total|currency }}<br/>
+        {% endif %}
+        <b>Total Due by Customer</b>: {{ order.balance|currency }}
+        <br/><br/>
+        
+        {% include 'shop/pretty_confirmation.html' %}
+        
+        {% if request.session.old_user_id or request.user.is_staff %}
+            <script type="text/javascript">
+                $(function() {
+                   $.get('{% url clear_affiliate %}');
+                });
+            </script>
+        <!-- <p>
+            <a href="{% url back_to_old_user %}">Log out of {{ request.user.first_name }}'s Account</a>
+        </p> -->
+        {% endif %}
+    {% else %}
+        <div id="cc_form">
+            <h3>Enter Passenger Information</h3>
+            <p>Please enter passenger information on this secure booking page and proceed to the next page. Your confirmation will come via email. </p>
+            
+            <!-- <a href="{% url satchmo_checkout-step1 %}?force_charge=1">Or charge a credit card for this order</a> -->
+            {% if user.is_staff %}
+                <div class="error">If you want to charge the users credit card then logout and start afresh.</div>
+            {% endif %}
+            
+            {% if form.non_field_errors %}
+                <h2>{% trans "Please correct the following error:" %}</h2>
+                {{ form.non_field_errors }}
+            {% endif %}
+        
+            <form method="post" action="">
+                <table>
+                    {{ form.as_table }}
+                	<tr><td></td>
+                	    <td>
+                	        <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+                	        <input type="submit" value="{% trans "Book Ticket(s)" %}"/>
+                	    </td>
+                	</tr>
+                </table>
+            </form>
+            
+            <script type="text/javascript">
+                $(function() {
+                    $('form').submit(function() {
+                        $('form input[type=submit]').attr('disabled', true);
+                        $('form img').show();
+                    });
+                });
+            </script>
+        </div>
+    {% endif %}
+{% endblock %}

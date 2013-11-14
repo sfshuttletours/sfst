@@ -1,0 +1,40 @@
+[
+    {
+        "pk": 1, 
+        "model": "localsite.siteskin", 
+        "fields": {
+            "order_confirmation_contact_info": "        San Francisco Comprehensive Shuttle Tours<br />\r\n        San Francisco, CA, USA, 94111<br /> \r\n        Email: info@sanfranshuttletours.com<br /> \r\n        Web: http://www.sanfranshuttletours.com<br />\r\n        Phone: 415-722-8677\r\n", 
+            "reseller_lp_content": "    <h3>TRAVEL AGENTS, AFFILIATES and WEB RESELLERS WELCOME!!</h3> \r\n\r\n    <p>San Francisco Shuttle Tours, The Wine Country Tour Shuttle and the Muir Woods Shuttle Tours welcomes any resellers of our tours.  Our reseller process is simple and you will be up and running selling our tours immediately!  You will be able to now sell our tours and receive commission checks from us monthly OR you will be given the opportunity to sell our tours at NET RATES and then charge your customer the regular posted rates and keep the difference for yourself.</p> \r\n\r\n    <b>Our net rates are as follows<super>*</super>:</b> \r\n    <div style=margin-left:15px;> \r\n       <table> \r\n          <tr><td>5 Hour City Tour:</td><td>   $48 (adults and seniors), $40 (children)</td></tr>\r\n          <tr><td>Wine Country Tour Shuttle:  </td><td> $77 (adults).</td></tr> \r\n          <tr><td>Muir Woods Shuttle Tours: </td><td>$48 (adults), $45 (children)</td></tr> \r\n          <tr><td>Muir Woods/City Tour Combo: </td><td>$92 (adults), $85 (children)</td></tr> \r\n       </table> \r\n       <br><font size=1>*: clients that sell lots of tours can achieve better rates and/or commissions - - please inquire by completing our reseller process!</font> \r\n    </div> \r\n", 
+            "code": "sfst", 
+            "hash": "a62abe5c2d2382e2e5c5d7afc0cfd81b", 
+            "name": "Default SFST", 
+            "header_banner_image": "images/siteskinheader/admin_header_sfst.jpg", 
+            "is_concierge_cta": true, 
+            "header_banner_link": "http://sanfranshuttletours.com/", 
+            "is_default": true, 
+            "custom_css": "", 
+            "order_confirmation_logo": "images/orderconfirmationlogos/receipt_header_sfst.jpeg", 
+            "toc_text": "I agree to 50% refund with 2 hours written notice, and no refunds for less than 2 hours notice, and no refunds on Alcatraz-related tours, and other general terms", 
+            "toc_link": "http://www.sanfranshuttletours.com/terms_privacy.htm"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "localsite.siteskin", 
+        "fields": {
+            "order_confirmation_contact_info": "        Tours of California<br />\r\n        San Francisco, CA, USA, 94111<br /> \r\n        Email: info@toursofcalifornia.com<br /> \r\n        Web: http://www.toursofcalifornia.com<br />\r\n        Phone: 415-722-8677\r\n", 
+            "reseller_lp_content": "    <h3>TRAVEL AGENTS, AFFILIATES and WEB RESELLERS WELCOME!!</h3> \r\n\r\n    <p>Tours of California welcomes any resellers of our tours.  Our reseller process is simple and you will be up and running selling our tours immediately!  You will be able to now sell our tours and receive commission checks from us monthly OR you will be given the opportunity to sell our tours at NET RATES and then charge your customer the regular posted rates and keep the difference for yourself.</p> \r\n\r\n    <b>Our net rates are as follows<super>*</super>:</b> \r\n    <div style=margin-left:15px;> \r\n       <table> \r\n          <tr><td>One size fits all TOC:</td><td>$121</td></tr>\r\n       </table> \r\n       <br><font size=1>*: clients that sell lots of tours can achieve better rates and/or commissions - - please inquire by completing our reseller process!</font> \r\n    </div> ", 
+            "code": "toc", 
+            "hash": "e1bd2c74818f54f660c94ee529eb0840", 
+            "name": "Tours of California", 
+            "header_banner_image": "images/siteskinheader/admin_header_toc.png", 
+            "is_concierge_cta": false, 
+            "header_banner_link": "http://toursofcalifornia.com/", 
+            "is_default": false, 
+            "custom_css": "", 
+            "order_confirmation_logo": "images/orderconfirmationlogos/receipt_header_toc.png", 
+            "toc_text": "No refunds, except the deposit ($300 per person) is refundable at any time.", 
+            "toc_link": "http://www.toursofcalifornia.com/terms_conditions.php"
+        }
+    }
+]
