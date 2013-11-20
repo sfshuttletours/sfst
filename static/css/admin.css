@@ -64,7 +64,7 @@ div#user-tools { background-color: #333; }
 
 /* Advanced analytics stuff / HOME screen */
 
-#analytics_side { width: 450px; float: left; }
+#analytics_side { width: initial; float: left; }
 #analytics_side .box h3 { font-weight: bold; font-size: 14px; float: left; }
 #analytics_side .box { padding: 5px; border: 1px solid #BBBBBB; }
 #analytics_side .box div { margin-right: 30px; }

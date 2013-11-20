@@ -109,4 +109,4 @@ class EmailCustomerForm(forms.Form):
 
 
 class LastNDaysStatsForm(forms.Form):
-    last_n_days_stats = forms.IntegerField(initial=7)
+    last_n_days_stats = forms.IntegerField(initial=2)

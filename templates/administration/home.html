@@ -30,12 +30,84 @@
                     <b>TOTALS: {{ totals_7_days_ago }} orders</b>
                 </div>
 
+                <!--<div class="fl">-->
+                    <!--{% for day in num_orders_7_days_one_year_ago %}-->
+                        <!--{{ day.date }} - {{ day.num_orders }} orders<br/>-->
+                    <!--{% endfor %}-->
+                    <!--<br/>-->
+                    <!--<b>{{ totals_year_go }} orders</b>-->
+                <!--</div>-->
+
                 <div class="fl">
-                    {% for day in num_orders_7_days_one_year_ago %}
-                        {{ day.date }} - {{ day.num_orders }} orders<br/>
+                    {% for day in num_orders_7_days %}
+                        Total sales<br/>
                     {% endfor %}
                     <br/>
-                    <b>{{ totals_year_go }} orders</b>
+                    <b>Total sales : $</b>
+                </div>
+
+                <div class="fl">
+                    {% for day in num_orders_7_days %}
+                        Adwords Wine Ad<br/>
+                    {% endfor %}
+                    <br/>
+                    <b>Total: $</b>
+                </div>
+
+                <div class="fl">
+                    {% for day in num_orders_7_days %}
+                        Adwords City Ad<br/>
+                    {% endfor %}
+                    <br/>
+                    <b>Total: $</b>
+                </div>
+
+                <div class="fl">
+                    {% for day in num_orders_7_days %}
+                        Adwords NYC Ad<br/>
+                    {% endfor %}
+                    <br/>
+                    <b>Total: $</b>
+                </div>
+
+                <div class="fl">
+                    {% for day in num_orders_7_days %}
+                        Bing Wine Ad<br/>
+                    {% endfor %}
+                    <br/>
+                    <b>Total: $</b>
+                </div>
+
+                <div class="fl">
+                    {% for day in num_orders_7_days %}
+                        Bing City Ad<br/>
+                    {% endfor %}
+                    <br/>
+                    <b>Total: $</b>
+                </div>
+
+                <div class="fl">
+                    {% for day in num_orders_7_days %}
+                        Bing NYC Ad<br/>
+                    {% endfor %}
+                    <br/>
+                    <b>Total: $</b>
+                </div>
+
+                <div class="fl">
+                    {% for day in num_orders_7_days %}
+                        Total Advertising<br/>
+                    {% endfor %}
+                    <br/>
+                    <b>Total: $</b>
+                </div>
+
+                <div class="fl">
+                    {% for day in num_orders_7_days %}
+                        Gross Revenue<br/>
+                    {% endfor %}
+                    <br/>
+                    <b>Total: $</b>
                 </div>
 
                 <div class="fl">

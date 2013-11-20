@@ -15,6 +15,8 @@ if not SATCHMO_APPS in sys.path:
 if not DIRNAME in sys.path:
     sys.path.append(DIRNAME)
 
+print SATCHMO_APPS, DIRNAME
+
 from django.core.management import execute_manager
 try:
     import settings # Assumed to be in the same directory.

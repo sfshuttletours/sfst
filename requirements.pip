@@ -8,7 +8,7 @@ wsgiref==0.1.2
 mysql-python==1.2.3c1
 South==0.7.2
 django-extensions==0.5
-nose==0.11.3
+nose
 python-memcached==1.45
 pygooglechart==0.3.0
 

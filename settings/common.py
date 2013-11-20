@@ -12,6 +12,8 @@ MEDIA_HASH = '63'
 DIRNAME = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 sys.path.insert(0, DIRNAME + '/')
+sys.path.insert(0, '/home/vb/danny_projects/sfst/sfst')
+sys.path.insert(0, '/home/vb/danny_projects/sfst/sfst/apps')
 
 DJANGO_PROJECT = 'sfst'
 DJANGO_SETTINGS_MODULE = 'sfst.settings'
@@ -34,7 +36,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sfst',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'root123',
         'OPTIONS': {'init_command' : 'SET NAMES "utf8", storage_engine=INNODB',},
     },
     'legacy': {
