@@ -154,7 +154,31 @@ def getCampaignsByAccountId(username, password, devtoken):
     res = _service.getfile().read()
 
     if statusmessage == "OK":
+
+        # The method call was successful.
+        print action + " succeeded."
+        # Display the tracking ID.
+        responseTree = ET.fromstring(res)
+        print "Tracking ID: " + responseTree.findtext(".//{" + ns_bingads + "}TrackingId")
+        # Print out the campaign information.
+        print # Blank line.
+        print "The following campaign IDs were returned by " + action + ":"
+        #campaignList = responseTree.findall(".//{" + ns_bingads + "}Campaign")
+
         campaignList = responseTree.findall(".//Campaigns")
+        print len(campaignList)
+        # for campaign in campaignList:
+            # name = campaign.find("{" + ns_bingads + "}Name")
+            # description = campaign.find("{" + ns_bingads + "}Description")
+            # monthlyBudget = campaign.find("{" + ns_bingads + "}MonthlyBudget")
+            # budgetType = campaign.find("{" + ns_bingads + "}BudgetType")
+            #
+            # print "Name          : ", name.text
+            # print "Description   : ", description.text
+            # print "MonthlyBudget : ", monthlyBudget.text
+            # print "BudgetType    : ", budgetType.text
+            # print # Blank line to separate campaigns.
+
     else:
         # The method call failed.
         print soapStr
