@@ -1,6 +1,7 @@
 {% extends "admin/base_site.html" %}
 
 {% load ctags %}
+{% load humanize %}
 
 {% block title %}Administration Dashboard{% endblock title %}
 
@@ -23,6 +24,7 @@
                 <div class="cl"></div>
 
                 <div class="fl">
+                    <b>Date</b></br>
                     {% for day in num_orders_7_days %}
                         {{ day.date }} - {{ day.num_orders }} orders<br/>
                     {% endfor %}
@@ -39,78 +41,88 @@
                 <!--</div>-->
 
                 <div class="fl">
+                    <b>Sales</b></br>
                     {% for day in num_orders_7_days %}
-                        Total sales<br/>
+                        ${{day.sum_total|floatformat:2|intcomma}}<br/>
                     {% endfor %}
                     <br/>
-                    <b>Total sales : $</b>
+                    <b>Total sales : ${{total_sales|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
-                    {% for day in num_orders_7_days %}
-                        Adwords Wine Ad<br/>
+                    <b>Adwords Wine Ad</b></br>
+                    {% for i in adwords_wine_ad %}
+                        ${{ i.spent|floatformat:2|intcomma }}<br/>
                     {% endfor %}
                     <br/>
-                    <b>Total: $</b>
+                    <b>Total: ${{adwords_wine_ad_sum|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
-                    {% for day in num_orders_7_days %}
-                        Adwords City Ad<br/>
+                    <b>Adwords City Ad</b></br>
+                    {% for i in adwords_city_ad %}
+                        ${{ i.spent|floatformat:2|intcomma }}<br/>
                     {% endfor %}
                     <br/>
-                    <b>Total: $</b>
+                    <b>Total: ${{adwords_city_ad_sum|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
-                    {% for day in num_orders_7_days %}
-                        Adwords NYC Ad<br/>
+                    <b>Adwords NYC Ad</b></br>
+                    {% for i in adwords_nyc_ad %}
+                        ${{ i.spent|floatformat:2|intcomma }}<br/>
                     {% endfor %}
                     <br/>
-                    <b>Total: $</b>
+                    <b>Total: ${{adwords_nyc_ad_sum|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
-                    {% for day in num_orders_7_days %}
-                        Bing Wine Ad<br/>
+                    <b>Bing Wine Ad</b></br>
+                    {% for bing in bing_wine_ad %}
+                        ${{ bing.spent|floatformat:2|intcomma }}<br/>
                     {% endfor %}
                     <br/>
-                    <b>Total: $</b>
+                    <b>Total: ${{bing_wine_ad_sum|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
-                    {% for day in num_orders_7_days %}
-                        Bing City Ad<br/>
+                    <b>Bing City Ad</b></br>
+                    {% for bing in bing_city_ad %}
+                        ${{ bing.spent|floatformat:2|intcomma }}<br/>
                     {% endfor %}
                     <br/>
-                    <b>Total: $</b>
+                    <b>Total: ${{bing_city_ad_sum|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
-                    {% for day in num_orders_7_days %}
-                        Bing NYC Ad<br/>
-                    {% endfor %}
+                    <b>Bing NYC Ad</b></br>
+                    {% for bing in bing_nyc_ad %}
+                            ${{ bing.spent|floatformat:2|intcomma }}<br/>
+                        {% endfor %}
                     <br/>
-                    <b>Total: $</b>
+                    <b>Total: ${{bing_nyc_ad_sum|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
-                    {% for day in num_orders_7_days %}
-                        Total Advertising<br/>
+                    <b>Total Advertising</b></br>
+                    {% for sum in sum_ads %}
+                        ${{ sum|floatformat:2|intcomma }}<br/>
                     {% endfor %}
                     <br/>
-                    <b>Total: $</b>
+                    <b>Total: ${{totals_sum_ads|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
-                    {% for day in num_orders_7_days %}
-                        Gross Revenue<br/>
+                    <b>Gross Revenues</b></br>
+                    {% for gr in gross_revenues %}
+                        ${{gr|floatformat:2|intcomma}}<br/>
                     {% endfor %}
                     <br/>
-                    <b>Total: $</b>
+                    <b>Total: ${{sum_gross_revenue|floatformat:2|intcomma}}</b>
                 </div>
 
                 <div class="fl">
+                    <b>Percent</b></br>
                     {% for change in percent_change_from_year_ago %}
                         <span style="color: {% if change < 0 %}#FF0000{% else %}#00FF00{% endif %};">{{ change }}%</span><br/>
                     {% endfor %}

@@ -44,6 +44,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL='info-dev@sfshuttletours.com'
 DEFAULT_TO_EMAIL='sfst-dev@tivix.com'
 
+BING_ACCOUNT = "hoangbaodang"
+BING_PASS = "danny123"
+BING_TOKEN = "BBD37VB98"
+
 try:
     from local import *
 except ImportError:
