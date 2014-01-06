@@ -64,10 +64,18 @@ div#user-tools { background-color: #333; }
 
 /* Advanced analytics stuff / HOME screen */
 
-#analytics_side { width: initial; float: left; }
+#analytics_side { width: 100%; float: left; }
 #analytics_side .box h3 { font-weight: bold; font-size: 14px; float: left; }
-#analytics_side .box { padding: 5px; border: 1px solid #BBBBBB; }
+#analytics_side .box { padding: 5px;overflow: auto;width: 100%}
 #analytics_side .box div { margin-right: 30px; }
+
+#analytics_side .box table tbody tr td{ font-size: 12px; min-width: 110px;}
+
+#analytics_side .box table tbody .first-row{ text-align: right; background-color: white; border-bottom: 1px solid grey; margin-bottom:5px }
+#analytics_side .box table tbody .first-row td{ font-size: 12px }
+
+#analytics_side .box table tbody .last-row{ text-align: right; background-color: white; border-top: 1px solid grey; font-size: 16px; margin-top:5px }
+#analytics_side .box table tbody .last-row td{ font-size: 12px }
 
 #analytics_main { width: 750px; float: left; margin-left: 20px; }
 

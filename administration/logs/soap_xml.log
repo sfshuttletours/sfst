@@ -1,0 +1,252 @@
+[2014-01-06 01:27:46,266::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 01:27:44
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 628-078-4041
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIwAAACOUggLyF1mNX-1vNfqL3dOYkWt0-KXENPoqG2I55XMSm9QjvuEtfT7FynelB2zqxCbjmmLDDc6OoJDZUf8FOzyDrEjoSwBeOffJ4eASsncfVhC9BctvkiK2b1ls8IVWa0BEm4q-QAMLAr6lM1aD79Qr_rxCp7e2Wrj3tyVSUw2QLVg_Zrudz3ZLrWeqSFEyEk
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null4488074503010715528.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 09:27:46 GMT
+Expires: Mon, 06 Jan 2014 09:27:46 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 01:27:46
+[2014-01-06 01:27:47,977::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 01:27:47
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 991-008-6537
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIwAAAA99wuJ_917ySwFsjg5q9zYXjHhwYZXlP39RYxCtww_7lk7v6zYUtnV2E3_GvPrcLT-dsXLnFKThnBrkTDYsYW-R_t5vJqB0eo0pv36LZUBqCovVzJzdqqozVeuVXBboegUbJmTaiaMPdAuZcGwAO0hHGLebnGX6sUkKNMScdIuxlyHekL9EcNXmauEI15I_BQ
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null7733598388222234966.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 09:27:47 GMT
+Expires: Mon, 06 Jan 2014 09:27:47 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 01:27:47
+[2014-01-06 01:27:49,475::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 01:27:48
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 860-734-9136
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIsAAAAetLg7J3PRqOr2e863nlNoqE7AQcTwdsznhcTj9aeiaZsAcIzSCdP-XW6xMYdLkIyksiRsUWl_pEMcH17AOkHupnimdC_rXItkj2Vd2MUbri9ATkPgHpxQRfgqzs2Bn7zVfDqJPoEDlZw0esfPl1Gw5HtVi6Mz46KQr9-hYfE4-_ecUa5ohlptRvMRxNvjxk0
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null3541346771130185333.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 09:27:49 GMT
+Expires: Mon, 06 Jan 2014 09:27:49 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 01:27:49
+[2014-01-06 02:30:06,422::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 02:30:04
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 628-078-4041
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIwAAADbkyaG-MQM5Ri0jDzEXGi9Pv9AeVOJHf_kulAbAldtZ4phc-WKXDErcZsbdlB9tr3pvs98-1DD773Yn73-79uwUvYkrCgh3twLSK8aO7PJi3cvWLQ-cRrghSkx_Srbu2U00yNDM_If2ZJ3xmAykA9fbCBpvnPlLJVNQ-abLkwEegGzAh_oNBXeRWw8X-gQo-M
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null1571085230666219343.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 10:30:06 GMT
+Expires: Mon, 06 Jan 2014 10:30:06 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 02:30:06
+[2014-01-06 02:30:07,832::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 02:30:07
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 991-008-6537
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIsAAADzlgvkxWdgZjz5Ly3jQYNEOazCZiNharkHSzRX1TrylP-CTj33M3YQBPJQm20Gq2S03fywqsvwEdKAU7DecH_6385jzmThIct4-tVXe3GHT1ATClUvBRg3QdbJxhRLQ8mMPFkJHVPiRJKPPa1v_j1xMZpfhh3WeW4QKVtmoCbqdrDNhQvfvhJI1SXgw-XhYqY
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null2599185332222015930.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 10:30:07 GMT
+Expires: Mon, 06 Jan 2014 10:30:07 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 02:30:07
+[2014-01-06 02:30:09,451::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 02:30:08
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 860-734-9136
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIsAAACHyqOM6JJWSQuDx86Zb9ONmY8d9J8wzW1uZRKwJhp6T_gg7ElTHY8ZYWPR1YYgSNIq50EveXq34kO3WCy6P_DIXsE_CvTYD2RMkGCsN-ccIgBh4wgIrZSclkib7KzrB0PZjK3tzq2z8aht38dptq1PlqJ_QqlVV1fxxVtT-_eYQpxVrRkb-eWw6uZkkAnP5-M
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null2065562100941648280.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 10:30:09 GMT
+Expires: Mon, 06 Jan 2014 10:30:09 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 02:30:09
+[2014-01-06 03:35:06,546::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 03:35:05
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 628-078-4041
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIwAAABSxH5jupjxHpx8FxVHjaGasPzxqR5QaXKQT4xb-QojSgFa5fs-1_KXhiTCxfj3wLiDNKpJqLxIrBmB5PPKiPcibmGCOlRE6fiaPo3m09qwyV-b0izuV5TrEiwlWAnWECHNxnge1CJjo7Tvea3gaQiYd0CtHyY5ozMSgfjCCBzrrYH55vvF75w3ddKxEIfu9Ds
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null2458269112652464233.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 11:35:06 GMT
+Expires: Mon, 06 Jan 2014 11:35:06 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 03:35:06
+[2014-01-06 03:35:08,145::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 03:35:07
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 991-008-6537
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIwAAACvlq70vvHnRDeBGR2DnYL8Z3RlKQDXRPuip307NoALdjNRS0nEUZAa_I9ZAxsj5DanhXj3pe8uDz7GAj6g4clUCByNltiSCD-bsrIlSGs2ZcE_bO0tIZbZXKmypvGpgwMFIoOx3i7k8Ktk0jTBYQm5Asl8WUT3e77gvnoubRBmrhGhnyI2dvPiC1U_dV2AeuY
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null1337474219341109322.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 11:35:08 GMT
+Expires: Mon, 06 Jan 2014 11:35:08 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 03:35:08
+[2014-01-06 03:35:10,236::DEBUG:: (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6)] StartTime: 2014-01-06 03:35:08
+POST: https://adwords.google.com/api/adwords/reportdownload/v201309
+clientCustomerId: 860-734-9136
+developerToken: WwYE5J9ZlMs46IHfAZL8Dg
+Accept-Encoding: gzip
+returnMoneyInMicros: false
+Content-Encoding: gzip
+Content-Length: 260
+User-Agent: test (AwApi-Python/15.12.0, Common-Python/3.1.1, Python/2.6),gzip
+Content-Type: application/x-www-form-urlencoded
+Authorization: GoogleLogin auth=DQAAAIwAAADpeyGD0-P9GXPqaQC26LwQL4zwKXwjMTRVUlsVABQJoj60q7hxq6q8Ks-7xQNPzH-V4f_z6VtAfRjBxOzxJrLfJY6_khk9wFsvgwe0L014m-8SDDs-AVy4Xnw1VZe4Ww9ubyTGhaH4S4IZ0qWsYqDoIK4exbcty7rlD47IYSTxIEsE9ZKt3nso4Sg927iSb1Q
+
+__rdxml=%3C%3Fxml+version%3D%221.0%22%3F%3E%0A%3CreportDefinition%3E%0A%3Cselector%3E%0A%3Cfields%3ECampaignName%3C%2Ffields%3E%0A%3Cfields%3ECampaignId%3C%2Ffields%3E%0A%3Cfields%3ECost%3C%2Ffields%3E%0A%3Cfields%3EDate%3C%2Ffields%3E%0A%3C%2Fselector%3E%0A%3CreportName%3ECRITERIA_PERFORMANCE_REPORT%3C%2FreportName%3E%0A%3CreportType%3ECAMPAIGN_PERFORMANCE_REPORT%3C%2FreportType%3E%0A%3CdateRangeType%3EALL_TIME%3C%2FdateRangeType%3E%0A%3CdownloadFormat%3EXML%3C%2FdownloadFormat%3E%0A%3CincludeZeroImpressions%3Efalse%3C%2FincludeZeroImpressions%3E%0A%3C%2FreportDefinition%3E
+
+HTTP 200
+Content-Type: application/xml; charset=UTF-8
+Content-Disposition: /tmp/reportId-null424361286628893693.tmprpt.xml
+Content-Encoding: gzip
+Transfer-Encoding: chunked
+Date: Mon, 06 Jan 2014 11:35:10 GMT
+Expires: Mon, 06 Jan 2014 11:35:10 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Server: GSE
+Connection: close
+EndTime: 2014-01-06 03:35:10

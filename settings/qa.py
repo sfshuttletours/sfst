@@ -1,6 +1,6 @@
 # QA overrides for Django settings
 
-DEBUG = False
+DEBUG = False 
 
 IS_QA = True
 
@@ -20,6 +20,10 @@ DATABASES = {
 }
 
 SITE_DOMAIN = 'qa.securebookingshuttletours.com'
+
+BING_ACCOUNT = "hoangbaodang"
+BING_PASS = "danny123"
+BING_TOKEN = "BBD37VB98"
 
 # email stuff
 EMAIL_BACKEND = 'common.backends.TestingEmailBackend'

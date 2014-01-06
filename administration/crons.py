@@ -153,3 +153,24 @@ class UnfinalizedTourAlertCronJob(CronJobBase):
             logging.info(message)
             send_mail('ALERT: Some tours not finalized for %s' % day, message, django_settings.DEFAULT_FROM_EMAIL,
                 [django_settings.DEFAULT_TO_EMAIL])
+            
+
+from administration.bing import getBingReport 
+from administration.adwords import get_adwords_report
+
+class PullAdsReportCronJob(CronJobBase):
+    """
+    Alert email to point out any unfinalized tours.
+    """
+    RUN_EVERY_MINS = 60  # check every hour
+
+    schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
+    code = 'administration.pull_ads_report'
+
+    def do(self):
+        logging.info('Pulling ads reports')
+        adwords_report = get_adwords_report(True)
+        report = getBingReport(1600)
+
+
+

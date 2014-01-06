@@ -18,7 +18,6 @@ from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.encoding import smart_str
-from apps.l10n.models import Country
 
 from common.helper import start_thread, send_mail as helper_send_mail
 from satchmo_store.shop.models import OrderItem, Config
@@ -525,7 +524,7 @@ class PaymentAndCardholderInfoForm(forms.Form):
     street1 = forms.CharField(max_length=30, label=_('Street'))
     city = forms.CharField(max_length=30, label=_('City'))
     state = forms.CharField(max_length=30, label=_('State'))
-    country = forms.ModelChoiceField(Country.objects.all(), label=_('Country'), empty_label=None)
+    country = forms.ModelChoiceField(shop.countries(), label=_('Country'), empty_label=None)
 
     credit_type = forms.ChoiceField()
     credit_number = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'autocomplete': 'off'}))

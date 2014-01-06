@@ -5,178 +5,186 @@
 
 {% block title %}Administration Dashboard{% endblock title %}
 
-
 {% block content %}
-    {% if not user.is_superuser %}
-        <h1>Shuttle Tours Administration Interface</h1>
-        <p>Found a bug? Email <a href="mailto:support@tivix.com">support@tivix.com</a></p>
-    {% else %}
-        <h1>Administration Dashboard</h1>
-        <div id="analytics_side">
-            <div class="box">
-                <h3>
-                    <form method="GET" action="{% url administration_home %}">
-                        {{ last_n_days_stats_form.last_n_days_stats }} days data
-                        <input type="submit" value="GO" />
-                        <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
-                    </form>
-                </h3>
-                <div class="cl"></div>
+<style>
+	tr:nth-child(odd) {
+		background-color: lightgrey
+	}
+	tr:nth-child(even) {
+		background-color: white
+	}
+</style>
 
-                <div class="fl">
-                    <b>Date</b></br>
-                    {% for day in num_orders_7_days %}
-                        {{ day.date }} - {{ day.num_orders }} orders<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>TOTALS: {{ totals_7_days_ago }} orders</b>
-                </div>
+{% if not user.is_superuser %}
+<h1>Shuttle Tours Administration Interface</h1>
+<p>
+	Found a bug? Email <a href="mailto:support@simpleunion.com">support@simpleunion.com</a>
+</p>
+{% else %}
+<h1>Administration Dashboard</h1>
+<div id="analytics_side">
+	<div class="box">
+		<h3>
+		<form method="GET" action="{% url administration_home %}">
+			{{ last_n_days_stats_form.last_n_days_stats }} days data
+			<input type="submit" value="GO"/>
+			<img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+		</form></h3>
+		<div class="cl"></div>
+		
+		<table>
+			<tbody>
+				{% for result in results %}
+				<tr style="text-align: right">
+					<td> {{ result.date }} - {{ result.order.num_orders|default:'0' }} orders </td>
+					<td> {{ result.date_one_year_ago }} - {{ result.order_one_year_ago.num_orders|default:'0' }} orders </td>
+					{% if result.percent_change < 0 %}
+					<td style="color:red"> {{result.percent_change}}% </td>
+					{% else %}
+						<td style="color:green"> 
+						{% if result.percent_change != "N/A" %}
+							{{result.percent_change}}%
+						{% else %}
+							{{result.percent_change}}
+						{% endif %} 
+						</td>
+					{% endif %}
+				{% endfor %}
+				<tr class="last-row">
+					<td style="text-align: left"><b>Total: </b><b style="float:right">{{ total_orders }} orders</b></td>
+					<td><b>{{ total_orders_one_year_ago }} orders</b></td>
+					{% if result.percent_change < 0 %}
+					<td style="color:red"><b>{{totals_percent_change}}%</b></td>
+					{% else %}
+					<td style="color:green"><b>{{totals_percent_change}}%</b></td>
+					{% endif %}
+				<tr>
+					
+				</tr>
+			</tbody>
+		</table>
+		<table style="margin-top: 15px;margin-bottom: 15px;width: 100%">
+			<tbody>
+				<tr class="first-row">
+					<td style="text-align: left"><b>Date</b></td>
+					<!-- <td><b>A Year Ago</b></td>
+					<td><b>Percent Change</b></td> -->
+					<td><b>Sales</b></td>
+					<td><b>Bing Wine</b></td>
+					<td><b>Bing City</b></td>
+					<td><b>Bing NYC</b></td>
+					<td><b>Adwords Wine</b></td>
+					<td><b>Adwords City</b></td>
+					<td><b>Adwords NYC</b></td>
+					<td><b>Total Advertising</b></td>
+					<td><b>Gross Revenue</b></td>
+				</tr>
+				{% for result in results %}
 
-                <!--<div class="fl">-->
-                    <!--{% for day in num_orders_7_days_one_year_ago %}-->
-                        <!--{{ day.date }} - {{ day.num_orders }} orders<br/>-->
-                    <!--{% endfor %}-->
-                    <!--<br/>-->
-                    <!--<b>{{ totals_year_go }} orders</b>-->
-                <!--</div>-->
+				<tr style="text-align: right">
+					<td style="text-align: left"> {{ result.date }} </td>
+					<!-- <td> {{ result.date_one_year_ago }} - {{ result.order_one_year_ago.num_orders|default:'0' }} orders </td>
+					{% if result.percent_change < 0 %}
+					<td style="color:red"> {{result.percent_change}}% </td>
+					{% else %}
+						<td style="color:green"> 
+						{% if result.percent_change != "N/A" %}
+							{{result.percent_change}}%
+						{% else %}
+							{{result.percent_change}}
+						{% endif %} 
+						</td>
+					{% endif %} -->
+					<td> ${{ result.order.sum_total|default:0|floatformat:2|intcomma }} </td>
+					<td> ${{ result.bing_wine.DailySpend|floatformat:2|intcomma  }} </td>
+					<td> ${{ result.bing_city.DailySpend|floatformat:2|intcomma }} </td>
+					<td> ${{ result.bing_nyc.DailySpend|floatformat:2|intcomma }} </td>
+					<td> ${{ result.adwords_wine.DailySpend|floatformat:2|intcomma }} </td>
+					<td> ${{ result.adwords_city.DailySpend|floatformat:2|intcomma }} </td>
+					<td> ${{ result.adwords_nyc.DailySpend|floatformat:2|intcomma }} </td>
+					<td> ${{ result.total_advertising|floatformat:2|intcomma }} </td>
+					{% if result.gross_revenue < 0 %}
+					<td style="color:red"><b>${{ result.gross_revenue|floatformat:2|intcomma }}</b></td>
+					{% else %}
+					<td style="color:green"><b>${{ result.gross_revenue|floatformat:2|intcomma }}</b></td>
+					{% endif %}
+				</tr>
 
-                <div class="fl">
-                    <b>Sales</b></br>
-                    {% for day in num_orders_7_days %}
-                        ${{day.sum_total|floatformat:2|intcomma}}<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>Total sales : ${{total_sales|floatformat:2|intcomma}}</b>
-                </div>
+				{% endfor %}
+				<tr class="last-row">
+					<td style="text-align: left"></td>
+					<!-- <td><b>{{ total_orders_one_year_ago }} orders</b></td>
+					{% if result.percent_change < 0 %}
+					<td style="color:red"><b>{{totals_percent_change}}%</b></td>
+					{% else %}
+					<td style="color:green"><b>{{totals_percent_change}}%</b></td>
+					{% endif %} -->
+					<td><b>Sales: ${{ total_sales|floatformat:2|intcomma }}</b></td>
+					<td><b>Bing Wine: ${{ bing_wine_ad_sum|floatformat:2|intcomma }}</b></td>
+					<td><b>Bing City: ${{ bing_city_ad_sum|floatformat:2|intcomma }}</b></td>
+					<td><b>Bing NYC: ${{ bing_nyc_ad_sum|floatformat:2|intcomma }}</b></td>
+					<td><b>Adwords Wine: ${{ adwords_wine_ad_sum|floatformat:2|intcomma }}</b></td>
+					<td><b>Adwords City: ${{ adwords_city_ad_sum|floatformat:2|intcomma }}</b></td>
+					<td><b>Adwords NYC: ${{ adwords_nyc_ad_sum|floatformat:2|intcomma }}</b></td>
+					<td><b>Total Advertising: ${{ total_advertising_sum|floatformat:2|intcomma }}</b></td>
+					{% if total_gross_revenue < 0 %}
+					<td><b>Gross Revenue</b><b style="color:red">: ${{ total_gross_revenue|floatformat:2|intcomma }}</b></td>
+					{% else %}
+					<td><b>Gross Revenue</b><b  style="color:green">: ${{ total_gross_revenue|floatformat:2|intcomma }}</b></td>
+					{% endif %}
+				</tr>
+			</tbody>
+		</table>
+		<div class="cl"></div>
+	</div>
+</div>
 
-                <div class="fl">
-                    <b>Adwords Wine Ad</b></br>
-                    {% for i in adwords_wine_ad %}
-                        ${{ i.spent|floatformat:2|intcomma }}<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>Total: ${{adwords_wine_ad_sum|floatformat:2|intcomma}}</b>
-                </div>
+<div class="cl"></div>
 
-                <div class="fl">
-                    <b>Adwords City Ad</b></br>
-                    {% for i in adwords_city_ad %}
-                        ${{ i.spent|floatformat:2|intcomma }}<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>Total: ${{adwords_city_ad_sum|floatformat:2|intcomma}}</b>
-                </div>
+<br/>
+<hr/>
+<br/>
 
-                <div class="fl">
-                    <b>Adwords NYC Ad</b></br>
-                    {% for i in adwords_nyc_ad %}
-                        ${{ i.spent|floatformat:2|intcomma }}<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>Total: ${{adwords_nyc_ad_sum|floatformat:2|intcomma}}</b>
-                </div>
+<h2>Detailed Analytics</h2>
+<div id="analytics_main">
+	<form action="" method="POST" accept-charset="utf-8" id="id_order_search_form">
+		{% if form.errors %}
+		{{ form.non_field_errors }}
+		<div class="cl"></div>
+		{% endif %}
 
-                <div class="fl">
-                    <b>Bing Wine Ad</b></br>
-                    {% for bing in bing_wine_ad %}
-                        ${{ bing.spent|floatformat:2|intcomma }}<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>Total: ${{bing_wine_ad_sum|floatformat:2|intcomma}}</b>
-                </div>
+		<label for="search">From Date</label>
+		<input type="text" name="from_date" value="{{ request.POST.from_date }}" />
+		{{ form.from_date.errors }}
+		<br/>
 
-                <div class="fl">
-                    <b>Bing City Ad</b></br>
-                    {% for bing in bing_city_ad %}
-                        ${{ bing.spent|floatformat:2|intcomma }}<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>Total: ${{bing_city_ad_sum|floatformat:2|intcomma}}</b>
-                </div>
+		<label for="search">To Date:</label>
+		<input type="text" name="to_date" value="{{ request.POST.to_date }}" />
+		{{ form.to_date.errors }}
+		<br/>
 
-                <div class="fl">
-                    <b>Bing NYC Ad</b></br>
-                    {% for bing in bing_nyc_ad %}
-                            ${{ bing.spent|floatformat:2|intcomma }}<br/>
-                        {% endfor %}
-                    <br/>
-                    <b>Total: ${{bing_nyc_ad_sum|floatformat:2|intcomma}}</b>
-                </div>
+		{{ form.exclude_usa.label }} {{ form.exclude_usa }}
+		{{ form.order_date_type.label }} {{ form.order_date_type }}
+		<br/>
 
-                <div class="fl">
-                    <b>Total Advertising</b></br>
-                    {% for sum in sum_ads %}
-                        ${{ sum|floatformat:2|intcomma }}<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>Total: ${{totals_sum_ads|floatformat:2|intcomma}}</b>
-                </div>
+		<input type="submit" value="Go">
+		<img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
+	</form>
 
-                <div class="fl">
-                    <b>Gross Revenues</b></br>
-                    {% for gr in gross_revenues %}
-                        ${{gr|floatformat:2|intcomma}}<br/>
-                    {% endfor %}
-                    <br/>
-                    <b>Total: ${{sum_gross_revenue|floatformat:2|intcomma}}</b>
-                </div>
+	{% if analytics_total %}
+	<div>
+		<h1>Total # of Orders: {{ analytics_total.total_orders }}</h1>
+		<h2># Tours Sold: {{ analytics_total.total_tours_sold }}</h2>
+		<!-- <img src="{{ analytics_total.state_order_graph_url }}" /> -->
+		<img src="{{ analytics_total.country_order_graph_url }}" />
+		<img src="{{ analytics_total.tour_type_pie_chart_url }}" />
+	</div>
+	{% endif %}
+</div>
 
-                <div class="fl">
-                    <b>Percent</b></br>
-                    {% for change in percent_change_from_year_ago %}
-                        <span style="color: {% if change < 0 %}#FF0000{% else %}#00FF00{% endif %};">{{ change }}%</span><br/>
-                    {% endfor %}
-                    <br/>
-                    <b><span style="color: {% if totals_percent_change < 0 %}#FF0000{% else %}#00FF00{% endif %};">{{ totals_percent_change }}%</span></b>
-                </div>
-                <div class="cl"></div>
-            </div>
-        </div>
-
-        <div class="cl"></div>
-
-        <br/><hr/><br/>
-
-        <h2>Detailed Analytics</h2>
-        <div id="analytics_main">
-            <form action="" method="POST" accept-charset="utf-8" id="id_order_search_form">
-                {% if form.errors %}
-                    {{ form.non_field_errors }}
-                    <div class="cl"></div>
-                {% endif %}
-
-                <label for="search">From Date</label>
-                <input type="text" name="from_date" value="{{ request.POST.from_date }}" />
-                {{ form.from_date.errors }}
-                <br/>
-
-                <label for="search">To Date:</label>
-                <input type="text" name="to_date" value="{{ request.POST.to_date }}" />
-                {{ form.to_date.errors }}
-                <br/>
-
-                {{ form.exclude_usa.label }} {{ form.exclude_usa }}
-                {{ form.order_date_type.label }} {{ form.order_date_type }}
-                <br/>
-
-                <input type="submit" value="Go">
-                <img src="{% media_url 'img/ajax-loader.gif' %}" class="hide" />
-            </form>
-
-            {% if analytics_total %}
-                <div>
-                    <h1>Total # of Orders: {{ analytics_total.total_orders }}</h1>
-                    <h2># Tours Sold: {{ analytics_total.total_tours_sold }}</h2>
-                    <!-- <img src="{{ analytics_total.state_order_graph_url }}" /> -->
-                    <img src="{{ analytics_total.country_order_graph_url }}" />
-                    <img src="{{ analytics_total.tour_type_pie_chart_url }}" />
-                </div>
-            {% endif %}
-        </div>
-
-        <script type="text/javascript" charset="utf-8">
-            $('input[name=from_date]').datepicker();
-            $('input[name=to_date]').datepicker();
-        </script>
-    {% endif %}
+<script type="text/javascript" charset="utf-8">
+	$('input[name=from_date]').datepicker();
+	$('input[name=to_date]').datepicker(); 
+</script>
+{%  endif %}
 {% endblock content %}

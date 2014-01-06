@@ -1,6 +1,6 @@
 from datetime import date
 from django.contrib import admin
-from django.contrib.admin.filterspecs import *
+from django.contrib.admin.filterspecs import BooleanFieldFilterSpec, FilterSpec
 from django import forms
 from django.utils.translation import ugettext as _
 

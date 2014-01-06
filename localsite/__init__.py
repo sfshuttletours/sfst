@@ -4,7 +4,7 @@ from django.db.models import signals as django_signals
 from django.contrib.auth.models import User
 from django.conf import settings as django_settings
 
-from apps.payment.forms import SimplePayShipForm
+from payment.forms import SimplePayShipForm
 from satchmo_store.shop import signals as satchmo_signals
 from satchmo_store.mail import send_html_email
 from south.modelsinspector import add_introspection_rules

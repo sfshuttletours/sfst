@@ -4,12 +4,13 @@ from django.conf import settings as django_settings
 from common.cron import CronJobManager
 
 from localsite.crons import DailySurveyEmailsCronJob, PriorToTourEmailCronJob
-from administration.crons import DailySettlementCronJob, DailyAuthorizedPaymentsCronJob
+from administration.crons import DailySettlementCronJob, DailyAuthorizedPaymentsCronJob, PullAdsReportCronJob
 
 
 crons_to_run = [DailySurveyEmailsCronJob,
                 DailyAuthorizedPaymentsCronJob,
-                PriorToTourEmailCronJob]  # add to list if more in the future
+                PriorToTourEmailCronJob,
+                PullAdsReportCronJob]  # add to list if more in the future
 
 if not django_settings.IS_QA:   # don't want daily settlment emails on QA
     crons_to_run.append(DailySettlementCronJob)

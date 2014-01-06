@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from decimal import Decimal
 from random import random
 import logging
@@ -21,7 +21,8 @@ from django.core.mail import send_mass_mail, send_mail
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
 from settings.dev import *
 
-import bing_api
+from bing import *
+from adwords import *
 from product.models import Product
 from satchmo_store.contact.models import ContactRole, Contact, AddressBook, PhoneNumber
 from satchmo_store.shop.models import Cart, OrderItem
@@ -180,16 +181,9 @@ class AdvancedAnalytics(object):
             color += '%X' % round(random() * 255)
         return color[0:6]
 
-
 @login_required
 @staff_member_required
 def home(request, template="administration/home.html"):
-    bing_wine_ad = []
-    bing_city_ad = []
-    bing_nyc_ad = []
-    campaign = bing_api.getCampaignsByAccountId(BING_ACCOUNT, BING_PASS, BING_TOKEN)
-
-
     if request.user.has_perm('resellers.is_reseller') and not request.user.is_staff:
         return HttpResponseRedirect(reverse('resellers_home'))
 
@@ -206,6 +200,11 @@ def home(request, template="administration/home.html"):
             last_n_days_stats_form = LastNDaysStatsForm()
             last_n_days_stats = 2
 
+        adwords_report = get_adwords_report()
+        report = getBingReport(last_n_days_stats)
+        
+        print "finising pulling reports"
+
         d['last_n_days_stats_form'] = last_n_days_stats_form
 
         # show basic stats ?
@@ -217,7 +216,6 @@ def home(request, template="administration/home.html"):
             values('date').annotate(num_orders=Count('id')). \
             annotate(sum_total=Sum('total'))
 
-        print num_orders_list_7_days
         # one year ago
         today_minus_one_year = datetime.today().date() - timedelta(days=364)
         today_minus_one_year_minus_one_week = today_minus_one_year - timedelta(
@@ -236,32 +234,7 @@ def home(request, template="administration/home.html"):
         day_num = 0
         totals = [0, 0, float(0)]
 
-        for num_orders in num_orders_list_7_days:
-            totals[0] += num_orders_list_7_days[day_num]['num_orders']
-            if num_orders_list_7_days_one_year_ago and num_orders_list_7_days_one_year_ago[day_num] > 0:
-                # print num_orders_list_7_days[day_num]['num_orders']
-                totals[1] += num_orders_list_7_days_one_year_ago[day_num]['num_orders']
-                percent_change = int(round((float(
-                    num_orders_list_7_days[day_num]['num_orders'] - num_orders_list_7_days_one_year_ago[day_num][
-                        'num_orders']) \
-                                            / num_orders_list_7_days_one_year_ago[day_num]['num_orders']) * 100))
-            else:
-                percent_change = 'N/A'
-            d['percent_change_from_year_ago'].append(percent_change)
-            day_num += 1
-
-        # total %
-        try:
-            totals[2] = int(round((float(totals[0] - totals[1]) / totals[1]) * 100))
-        except:
-            pass
-
-        d['totals_7_days_ago'] = totals[0]
-        d['totals_year_go'] = totals[1]
-        d['totals_percent_change'] = totals[2]
-
-        load_bing_and_adwords_report(d, num_orders_list_7_days)
-
+        load_bing_and_adwords_report(report, d, num_orders_list_7_days, num_orders_list_7_days_one_year_ago, last_n_days_stats, adwords_report)
         if request.method == 'POST':
             form = AdvancedAnalyticsForm(request.POST)
             if form.is_valid():
@@ -280,6 +253,9 @@ def home(request, template="administration/home.html"):
             form = AdvancedAnalyticsForm(initial={'exclude_usa': True})
 
         d['form'] = form
+
+    for day in d['percent_change_from_year_ago']:
+        print day
 
     return render_to_response(template, d, RequestContext(request))
 
@@ -1578,33 +1554,138 @@ def day_note_update(request):
 
 from random import random
 
-def load_bing_and_adwords_report(d, num_orders_list_7_days):
-    bing_city_ad = [{'date': num_orders['date'], 'spent': random()} for num_orders in num_orders_list_7_days]
-    bing_wine_ad = [{'date': num_orders['date'], 'spent': random()} for num_orders in num_orders_list_7_days]
-    bing_nyc_ad = [{'date': num_orders['date'], 'spent': random()} for num_orders in num_orders_list_7_days]
+def load_bing_and_adwords_report(report, d, num_orders_list_7_days, num_orders_list_7_days_one_year_ago, last_n_days_stats, adwords_report):
+    
+    bing_city_ad = []
+    bing_wine_ad = []
+    bing_nyc_ad = []
 
-    adwords_city_ad = [{'date': num_orders['date'], 'spent': random()} for num_orders in num_orders_list_7_days]
-    adwords_wine_ad = [{'date': num_orders['date'], 'spent': random()} for num_orders in num_orders_list_7_days]
-    adwords_nyc_ad = [{'date': num_orders['date'], 'spent': random()} for num_orders in num_orders_list_7_days]
+    adwords_city_ad = []
+    adwords_wine_ad = []
+    adwords_nyc_ad = []
 
-    d['bing_city_ad'] = bing_city_ad
-    d['bing_wine_ad'] = bing_wine_ad
-    d['bing_nyc_ad'] = bing_nyc_ad
-    d['adwords_city_ad'] = adwords_city_ad
-    d['adwords_wine_ad'] = adwords_wine_ad
-    d['adwords_nyc_ad'] = adwords_nyc_ad
+    list_of_orders = []
+
+    results = []
+
+    date_2_bing_nyc_ad = {}
+    date_2_bing_wine_ad = {}
+    date_2_bing_city_ad = {}
+
+    date_2_adwords_nyc_ad = {}
+    date_2_adwords_wine_ad = {}
+    date_2_adwords_city_ad = {}
+
+    date_2_order_info = {}
+    date_2_order_info_one_year_ago = {}
+
+    for date_order in num_orders_list_7_days:
+        date_2_order_info[date_order['date']] = date_order
+
+    for date_order in num_orders_list_7_days_one_year_ago:
+        date_2_order_info_one_year_ago[date_order['date']] = date_order
+
+    for adwords_day in adwords_report:
+        if adwords_day['campaign'] == 'New York Tours':
+            date_2_adwords_nyc_ad[adwords_day.get('date')] = {'Date': adwords_day.get('date'), 'DailySpend': float(adwords_day['cost'])}
+
+        if adwords_day['campaign'] == 'ALL Wine Country Tours':
+            date_2_adwords_wine_ad[adwords_day.get('date')] = {'Date': adwords_day.get('date'), 'DailySpend': float(adwords_day['cost'])}
+
+        if adwords_day['campaign'] == 'San Francisco Tours':
+            date_2_adwords_city_ad[adwords_day.get('date')] = {'Date': adwords_day.get('date'), 'DailySpend': float(adwords_day['cost'])}
+
+    for bing_day in report:
+        if bing_day['CampaignName'] == 'New York Tours':
+            date_2_bing_nyc_ad[bing_day.get('Date')] = {'Date': bing_day.get('Date'), 'DailySpend': float(bing_day['DailySpend'])}
+
+        if bing_day['CampaignName'] == 'ALL Wine Country Tours':
+            date_2_bing_wine_ad[bing_day.get('Date')] = {'Date': bing_day.get('Date'), 'DailySpend': float(bing_day['DailySpend'])}
+
+        if bing_day['CampaignName'] == 'San Francisco Tours':
+            date_2_bing_city_ad[bing_day.get('Date')] = {'Date': bing_day.get('Date'), 'DailySpend': float(bing_day['DailySpend'])}
+
+    bing_city_ad_sum = 0
+    bing_wine_ad_sum = 0
+    bing_nyc_ad_sum = 0
+
+    adwords_city_ad_sum = 0
+    adwords_wine_ad_sum = 0
+    adwords_nyc_ad_sum = 0
+
+    total_orders = 0
+    total_sales = 0
+    # total_sales_one_year_ago = 0
+    total_orders_one_year_ago = 0
+    total_gross_revenue = 0
+    total_advertising_sum = 0
+
+    for day in range(last_n_days_stats):
+        day_jump = str(datetime.today().date() - timedelta(days=day))
+        day_jump_one_year_ago = str(datetime.today().date() - timedelta(days=(day+365)))
+        day_jump = datetime.strptime(day_jump,'%Y-%m-%d')
+        day_jump = day_jump.strftime('%m/%d/%Y')
+        day_jump_one_year_ago = datetime.strptime(day_jump_one_year_ago,'%Y-%m-%d')
+        day_jump_one_year_ago = day_jump_one_year_ago.strftime('%m/%d/%Y')
+
+        total_advertising = date_2_bing_nyc_ad.get(day_jump, {'DailySpend': 0})['DailySpend'] + date_2_bing_wine_ad.get(day_jump, {'DailySpend': 0})['DailySpend'] + date_2_bing_city_ad.get(day_jump, {'DailySpend': 0})['DailySpend']+date_2_adwords_nyc_ad.get(day_jump, {'DailySpend': 0})['DailySpend'] + date_2_adwords_wine_ad.get(day_jump, {'DailySpend': 0})['DailySpend'] + date_2_adwords_city_ad.get(day_jump, {'DailySpend': 0})['DailySpend']
+        total_advertising_sum += total_advertising
+
+        bing_city_ad_sum += date_2_bing_city_ad.get(day_jump, {'DailySpend': 0})['DailySpend']
+        bing_wine_ad_sum += date_2_bing_wine_ad.get(day_jump, {'DailySpend': 0})['DailySpend']
+        bing_nyc_ad_sum += date_2_bing_nyc_ad.get(day_jump, {'DailySpend': 0})['DailySpend']
+
+        adwords_city_ad_sum += date_2_adwords_city_ad.get(day_jump, {'DailySpend': 0})['DailySpend']
+        adwords_wine_ad_sum += date_2_adwords_wine_ad.get(day_jump, {'DailySpend': 0})['DailySpend']
+        adwords_nyc_ad_sum += date_2_adwords_nyc_ad.get(day_jump, {'DailySpend': 0})['DailySpend']
+
+        total_orders += date_2_order_info.get(day_jump, {'num_orders': 0})['num_orders']
+        total_sales += date_2_order_info.get(day_jump, {'sum_total': 0})['sum_total']
+        total_orders_one_year_ago += date_2_order_info_one_year_ago.get(day_jump_one_year_ago, {'num_orders': 0})['num_orders']
+        # total_sales_one_year_ago += date_2_order_info_one_year_ago.get(day_jump, {'sum_total': 0})['sum_total']
 
 
-    d['bing_city_ad_sum'] = sum([info['spent'] for info in bing_city_ad])
-    d['bing_wine_ad_sum'] = sum([info['spent'] for info in bing_wine_ad])
-    d['bing_nyc_ad_sum'] = sum([info['spent'] for info in bing_nyc_ad])
-    d['adwords_city_ad_sum'] = sum([info['spent'] for info in adwords_city_ad])
-    d['adwords_wine_ad_sum'] = sum([info['spent'] for info in adwords_wine_ad])
-    d['adwords_nyc_ad_sum'] = sum([info['spent'] for info in adwords_nyc_ad])
+        gross_revenue = float(date_2_order_info.get(day_jump, {'sum_total': 0})['sum_total']) - total_advertising
+        total_gross_revenue += float(gross_revenue)
 
-    d['sum_ads'] = sum_ads = [bing_city_ad[i]['spent'] + bing_wine_ad[i]['spent'] + bing_nyc_ad[i]['spent'] + adwords_city_ad[i]['spent'] + adwords_wine_ad[i]['spent'] + adwords_nyc_ad[i]['spent'] for i in range(len(num_orders_list_7_days))]
-    d['totals_sum_ads'] = sum(sum_ads)
-    d['total_sales'] = sum([num_orders['sum_total'] for num_orders in num_orders_list_7_days])
-    d['gross_revenues'] = gross_revenues = [num_orders_list_7_days[i]['sum_total'] - Decimal(sum_ads[i]) for i in range(len(num_orders_list_7_days))]
+        if date_2_order_info_one_year_ago and date_2_order_info_one_year_ago.get(day_jump_one_year_ago) > 0:
+            percent_change = int(round((float(date_2_order_info.get(day_jump, {'num_orders': 0})['num_orders'] - date_2_order_info_one_year_ago.get(day_jump_one_year_ago, {'num_orders': 0})['num_orders']) \
+                                        / date_2_order_info_one_year_ago.get(day_jump_one_year_ago, {'num_orders': 0})['num_orders']) * 100))
+        else:
+            percent_change = 'N/A'
 
-    d['sum_gross_revenue'] = sum(gross_revenues)
+        results.append({'date': day_jump,
+                        'date_one_year_ago': day_jump_one_year_ago,
+                        'order': date_2_order_info.get(day_jump),
+                        'order_one_year_ago': date_2_order_info_one_year_ago.get(day_jump_one_year_ago),
+                        'percent_change':percent_change,
+                        'bing_city':date_2_bing_city_ad.get(day_jump, {'DailySpend': 0}),
+                        'bing_wine':date_2_bing_wine_ad.get(day_jump, {'DailySpend': 0}),
+                        'bing_nyc':date_2_bing_nyc_ad.get(day_jump, {'DailySpend': 0}),
+                        'adwords_city':date_2_adwords_city_ad.get(day_jump, {'DailySpend': 0}),
+                        'adwords_wine':date_2_adwords_wine_ad.get(day_jump, {'DailySpend': 0}),
+                        'adwords_nyc':date_2_adwords_nyc_ad.get(day_jump, {'DailySpend': 0}),
+                        'total_advertising': total_advertising,
+                        'gross_revenue': gross_revenue
+        })
+
+    d['bing_city_ad_sum'] =  bing_city_ad_sum
+    d['bing_wine_ad_sum'] = bing_wine_ad_sum
+    d['bing_nyc_ad_sum'] = bing_nyc_ad_sum
+
+    d['adwords_city_ad_sum'] =  adwords_city_ad_sum
+    d['adwords_wine_ad_sum'] = adwords_wine_ad_sum
+    d['adwords_nyc_ad_sum'] = adwords_nyc_ad_sum
+
+    d['total_orders'] = total_orders
+    d['total_sales'] = total_sales
+    d['total_orders_one_year_ago'] = total_orders_one_year_ago
+    # d['total_sales_one_year_ago'] = total_sales_one_year_ago
+    d['total_advertising_sum'] = total_advertising_sum
+    d['total_gross_revenue'] = float(total_sales) - total_advertising_sum
+    if total_orders_one_year_ago > 0:
+        d['totals_percent_change'] = int(round((float(total_orders - total_orders_one_year_ago) / total_orders_one_year_ago) * 100))
+    else:
+        d['totals_percent_change'] = 'N/A'
+
+    d['results'] = results
