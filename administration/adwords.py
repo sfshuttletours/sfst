@@ -69,7 +69,6 @@ def get_adwords_report(force_update=False):
         print 'saved report to cache'
         f.write(dumps({'results': results, 'last_updated': datetime.now()}))
         f.close()
-        
     return results
 
 def main(client, path):
@@ -97,8 +96,8 @@ def main(client, path):
 def download_reports():
   # Initialize client object.
   for customer in customer_list:
-    AdWordsClient.auth_pkl_name = customer['pkl_file_name']
-    full_path = download_path + '/' + customer['campaign'] + '.xml'
-    test_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),'..')
-    client = AdWordsClient(path=test_path)
-    main(client, full_path)
+      AdWordsClient.auth_pkl_name = customer['pkl_file_name']
+      full_path = download_path + '/' + customer['campaign'] + '.xml'
+      test_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),'..')
+      client = AdWordsClient(path=test_path)
+      main(client, full_path)

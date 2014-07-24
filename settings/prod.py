@@ -44,3 +44,6 @@ SATCHMO_SETTINGS = {
     'MULTISHOP' : False,
     'SSL': True
 }
+
+# Force SSL protocol for the whole site
+FORCE_SSL = True

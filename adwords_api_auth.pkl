@@ -5,7 +5,7 @@ S'991-008-6537'
 p2
 sS'developerToken'
 p3
-S'WwYE5J9ZlMs46IHfAZL8Dg'
+S'39Cy6b8b-U-khYZ7EJT3Tg'
 p4
 sS'clientEmail'
 p5
@@ -17,10 +17,10 @@ S'AwApi-Python-15.0.1|test'
 p8
 sS'password'
 p9
-S'leavemealone1'
+S'JohnChase'
 p10
 sS'email'
 p11
-S'dannys.testad@gmail.com'
+S'john@sfshuttletours.com'
 p12
 s.

@@ -39,7 +39,7 @@ class GlobalEmailForm(forms.Form):
 
 
 class BulkInventoryUpdator(forms.Form):
-    tour_schedule = forms.ModelChoiceField(queryset=TourSchedule.objects.filter(active=True, tour_type__is_combo=False))
+    tour_schedule = forms.ModelChoiceField(queryset=TourSchedule.objects.filter(active=True, tour_type__is_combo=False, tour_type__active=True))
     inventory = forms.IntegerField()
     start_date = forms.DateField()
     end_date = forms.DateField()

@@ -244,7 +244,7 @@ def getBingReport(custom_date_range):
         cached = loads(f.read())
         f.close()
 
-        if cached['last_updated'] + timedelta(minutes=60) > datetime.now() and cached.get('custom_date_range', 0) >= custom_date_range:
+        if cached['last_updated'] + timedelta(minutes=90) > datetime.now() and cached.get('custom_date_range', 0) >= custom_date_range and custom_date_range != 1600:
             print '===== loaded report form cache'
             return cached['results']
         else:

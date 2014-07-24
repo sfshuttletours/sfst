@@ -13,20 +13,20 @@ from payment.views.checkout import success
 from localsite.views import sfst_success, confirm_info
 
 
-ssl = get_satchmo_setting('SSL', default_value=False)
+ssl = get_satchmo_setting('SSL', default_value=True)
 handler404 = 'sfst.localsite.views.view_404'
 handler500 = 'sfst.localsite.views.view_500'
 
 # Public URLS
 urlpatterns = patterns('localsite.views',
-    url(r'^$', 'home', name='home'),
+    url(r'^$', 'home', {'SSL': ssl}, name='home'),
     # url(r'^cart/$', 'cart', name='cart'),
-    url(r'^affiliate-checkout/$', 'affiliate_checkout', name='affiliate_checkout'),
-    url(r'^product/(?P<tour_type_slug>[\w\-]+)/$', 'product', name='product'),
-    url(r'^ajax-get-schedule/(?P<tour_type_id>\d+)/$', 'ajax_get_schedule', name='ajax_get_schedule'),
+    url(r'^affiliate-checkout/$', 'affiliate_checkout', {'SSL': ssl}, name='affiliate_checkout'),
+    url(r'^product/(?P<tour_type_slug>[\w\-]+)/$', 'product', {'SSL': ssl}, name='product'),
+    url(r'^ajax-get-schedule/(?P<tour_type_id>\d+)/$', 'ajax_get_schedule', {'SSL': ssl}, name='ajax_get_schedule'),
     url(r'^ajax-get-schedule-adjust/(?P<tour_type_id>\d+)/$', 'ajax_get_schedule', {'SSL': ssl}, name='ajax_get_schedule_adjust'),
-    url(r'^accounts/dispatcher/', 'login_dispatcher', name='login_dispatcher'),
-    url(r'^clear-affiliate', 'clear_affiliate', name='clear_affiliate'),
+    url(r'^accounts/dispatcher/', 'login_dispatcher', {'SSL': ssl}, name='login_dispatcher'),
+    url(r'^clear-affiliate', 'clear_affiliate', {'SSL': ssl}, name='clear_affiliate'),
     url(r'^get-city-country-details/$', 'zip_to_city_country', {'SSL': ssl}, name='zip_to_city_country'),
     url(r'^customer-adjust/(?P<order_hash>\w+)/$', 'customer_order_detail',
         {'SSL': ssl}, name='customer_order_detail'),
@@ -41,7 +41,7 @@ urlpatterns = patterns('localsite.views',
     url(r'^sentry/', include('sentry.web.urls')),
 
     url(r'^0I3S1SYhWxhEZyXzhHKe2w--.html$', direct_to_template, {'template': 'blank.html'}),
-    url(r'^booking-error-form/$', 'booking_error_form', name="booking_error_form")
+    url(r'^booking-error-form/$', 'booking_error_form', {'SSL': ssl}, name="booking_error_form")
 
 )
 

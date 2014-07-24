@@ -737,12 +737,17 @@ class PaymentAndMoveForm(UserAdjustmentMoveForm, PaymentAndCardholderInfoForm):
 class ContactForm(forms.Form):
     phone_number = forms.CharField(label=_('Phone number'), max_length=30, required=False)
     email = forms.EmailField(label=_('Email address'), max_length=30, required=False)
+    tour = forms.CharField(label=_('Tour'), max_length=30, required=False)
 
     def send_mails(self):
         cd = self.cleaned_data
         if not cd['phone_number'] and not cd['email']:
             return
-        body = 'Here is the customers phone and email\n\n%(phone_number)s\n%(email)s' % cd
+        body = 'Here is the customers information\n\nPhone: %(phone_number)s\nEmail: %(email)s' % cd
+        
+        if cd.get('tour'):
+            body += '\nTour: %(tour)s' % cd
+        
         start_thread(send_mail, _('CUSTOMER HAD ISSUE BOOKING A TOUR'), body, django_settings.DEFAULT_FROM_EMAIL,
             [django_settings.DEFAULT_TO_EMAIL, ] if django_settings.IS_PROD else ['sfst@tivix.com'])
 

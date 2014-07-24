@@ -200,11 +200,15 @@ def home(request, template="administration/home.html"):
             last_n_days_stats_form = LastNDaysStatsForm()
             last_n_days_stats = 2
 
-        adwords_report = get_adwords_report()
+        try:
+            adwords_report = get_adwords_report(True)
+        except:
+            adwords_report = ''
+        
         report = getBingReport(last_n_days_stats)
         
         print "finising pulling reports"
-
+        d['adwords_report'] = adwords_report
         d['last_n_days_stats_form'] = last_n_days_stats_form
 
         # show basic stats ?
@@ -253,9 +257,6 @@ def home(request, template="administration/home.html"):
             form = AdvancedAnalyticsForm(initial={'exclude_usa': True})
 
         d['form'] = form
-
-    for day in d['percent_change_from_year_ago']:
-        print day
 
     return render_to_response(template, d, RequestContext(request))
 
@@ -1596,14 +1597,17 @@ def load_bing_and_adwords_report(report, d, num_orders_list_7_days, num_orders_l
             date_2_adwords_city_ad[adwords_day.get('date')] = {'Date': adwords_day.get('date'), 'DailySpend': float(adwords_day['cost'])}
 
     for bing_day in report:
+        bing_date = datetime.strptime(bing_day.get('Date'),'%m/%d/%Y')
+        bing_date = bing_date.strftime('%m/%d/%Y')
+        
         if bing_day['CampaignName'] == 'New York Tours':
-            date_2_bing_nyc_ad[bing_day.get('Date')] = {'Date': bing_day.get('Date'), 'DailySpend': float(bing_day['DailySpend'])}
-
+            date_2_bing_nyc_ad[bing_date] = {'Date': bing_date, 'DailySpend': float(bing_day['DailySpend'])}
+        
         if bing_day['CampaignName'] == 'ALL Wine Country Tours':
-            date_2_bing_wine_ad[bing_day.get('Date')] = {'Date': bing_day.get('Date'), 'DailySpend': float(bing_day['DailySpend'])}
-
+            date_2_bing_wine_ad[bing_date] = {'Date': bing_date, 'DailySpend': float(bing_day['DailySpend'])}
+        
         if bing_day['CampaignName'] == 'San Francisco Tours':
-            date_2_bing_city_ad[bing_day.get('Date')] = {'Date': bing_day.get('Date'), 'DailySpend': float(bing_day['DailySpend'])}
+            date_2_bing_city_ad[bing_date] = {'Date': bing_date, 'DailySpend': float(bing_day['DailySpend'])}
 
     bing_city_ad_sum = 0
     bing_wine_ad_sum = 0
@@ -1625,6 +1629,7 @@ def load_bing_and_adwords_report(report, d, num_orders_list_7_days, num_orders_l
         day_jump_one_year_ago = str(datetime.today().date() - timedelta(days=(day+365)))
         day_jump = datetime.strptime(day_jump,'%Y-%m-%d')
         day_jump = day_jump.strftime('%m/%d/%Y')
+        reformat_day_jump = day_jump.lstrip("0").replace(" 0", " ").replace('/0', '/')
         day_jump_one_year_ago = datetime.strptime(day_jump_one_year_ago,'%Y-%m-%d')
         day_jump_one_year_ago = day_jump_one_year_ago.strftime('%m/%d/%Y')
 
